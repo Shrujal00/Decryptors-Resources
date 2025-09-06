@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decryptors - Your Programming Journey Starts Here</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-code"></i>
+                <span>Decryptors</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" data-page="home" class="nav-link active">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link">Roadmaps <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#" data-page="roadmap" data-field="fullstack">Full Stack Development</a>
+                        <a href="#" data-page="roadmap" data-field="app">App Development</a>
+                        <a href="#" data-page="roadmap" data-field="dsa">DSA</a>
+                        <a href="#" data-page="roadmap" data-field="cybersecurity">Cybersecurity</a>
+                        <a href="#" data-page="roadmap" data-field="network">Network Engineering</a>
+                        <a href="#" data-page="roadmap" data-field="cloud">Cloud Engineering</a>
+                        <a href="#" data-page="roadmap" data-field="datascience">Data Science</a>
+                        <a href="#" data-page="roadmap" data-field="ml">Machine Learning</a>
+                        <a href="#" data-page="roadmap" data-field="ai">Artificial Intelligence</a>
+                    </div>
+                </li>
+                <li><a href="#" data-page="community" class="nav-link">Community</a></li>
+                <li><a href="#" data-page="admin" class="nav-link">Admin</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Welcome to <span class="accent">Decryptors</span></h1>
+                    <p>Your journey to becoming a skilled programmer starts here. We provide structured roadmaps, curated resources, and a supportive community to help you master any field in programming.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="showPage('roadmap', 'fullstack')">Start Learning</button>
+                        <button class="btn btn-secondary" onclick="showPage('community')">Join Community</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="container">
+                    <h2>Why Join Decryptors?</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <i class="fas fa-route"></i>
+                            <h3>Structured Roadmaps</h3>
+                            <p>Clear, step-by-step learning paths for every field in programming</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-book-open"></i>
+                            <h3>Curated Resources</h3>
+                            <p>Hand-picked free and paid resources to accelerate your learning</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-users"></i>
+                            <h3>Supportive Community</h3>
+                            <p>Connect with fellow learners and experienced mentors</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-search"></i>
+                            <h3>Easy Navigation</h3>
+                            <p>Find exactly what you need with our powerful search and filter tools</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="roadmaps-preview">
+                <div class="container">
+                    <h2>Explore Our Roadmaps</h2>
+                    <div class="roadmaps-grid" id="roadmaps-grid">
+                        <!-- Roadmaps will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap Page -->
+        <section id="roadmap" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1 id="roadmap-title">Roadmap</h1>
+                    <div class="search-container">
+                        <input type="text" id="resource-search" placeholder="Search resources...">
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="free">Free</button>
+                            <button class="filter-btn" data-filter="paid">Paid</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roadmap-content">
+                    <div class="timeline" id="roadmap-timeline">
+                        <!-- Timeline steps will be populated by JavaScript -->
+                    </div>
+
+                    <div class="resources-section">
+                        <h2>Resources</h2>
+                        <div class="admin-controls" id="admin-controls" style="display: none;">
+                            <button class="btn btn-primary" onclick="openAddResourceModal()">
+                                <i class="fas fa-plus"></i> Add Resource
+                            </button>
+                        </div>
+
+                        <div class="resources-container">
+                            <div class="resource-category">
+                                <div class="category-header" onclick="toggleCategory('free-resources')">
+                                    <h3><i class="fas fa-gift"></i> Free Resources</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="category-content" id="free-resources">
+                                    <div class="resources-list" id="free-resources-list">
+                                        <!-- Free resources will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="resource-category">
+                                <div class="category-header" onclick="toggleCategory('paid-resources')">
+                                    <h3><i class="fas fa-star"></i> Paid Resources</h3>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="category-content" id="paid-resources">
+                                    <div class="resources-list" id="paid-resources-list">
+                                        <!-- Paid resources will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Page -->
+        <section id="community" class="page">
+            <div class="container">
+                <h1>Community</h1>
+                <div class="community-content">
+                    <div class="announcements">
+                        <h2>Latest Announcements</h2>
+                        <div class="admin-controls" id="announcement-admin-controls" style="display: none;">
+                            <button class="btn btn-primary" onclick="openAddAnnouncementModal()">
+                                <i class="fas fa-plus"></i> Add Announcement
+                            </button>
+                        </div>
+                        <div id="announcements-list">
+                            <div class="announcement-card">
+                                <div class="announcement-date">Dec 15, 2024</div>
+                                <h3>Welcome to Decryptors!</h3>
+                                <p>We're excited to launch our new platform. Start exploring the roadmaps and join our growing community of learners.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="events">
+                        <h2>Upcoming Events</h2>
+                        <div class="admin-controls" id="event-admin-controls" style="display: none;">
+                            <button class="btn btn-primary" onclick="openAddEventModal()">
+                                <i class="fas fa-plus"></i> Add Event
+                            </button>
+                        </div>
+                        <div id="events-list">
+                            <!-- Events will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Page -->
+        <section id="admin" class="page">
+            <div class="container">
+                <h1>Admin Panel</h1>
+                <div id="admin-login" class="admin-login">
+                    <div class="login-form">
+                        <h2>Admin Login</h2>
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" id="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" id="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+                    <h2>Welcome, Admin!</h2>
+                    <p>You are now in editing mode. You can add, edit, or remove resources from any roadmap.</p>
+                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Resource Modal -->
+    <div id="add-resource-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddResourceModal()">&times;</span>
+            <h2>Add Resource</h2>
+            <form id="add-resource-form">
+                <div class="form-group">
+                    <label for="resource-title">Title:</label>
+                    <input type="text" id="resource-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="resource-url">URL:</label>
+                    <input type="url" id="resource-url" required>
+                </div>
+                <div class="form-group">
+                    <label for="resource-description">Description:</label>
+                    <textarea id="resource-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="resource-type">Type:</label>
+                    <select id="resource-type" required>
+                        <option value="free">Free</option>
+                        <option value="paid">Paid</option>
+                    </select>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Add Resource</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAddResourceModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="add-event-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddEventModal()">&times;</span>
+            <h2 id="event-modal-title">Add Event</h2>
+            <form id="add-event-form">
+                <div class="form-group">
+                    <label for="event-title">Event Title:</label>
+                    <input type="text" id="event-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-description">Description:</label>
+                    <textarea id="event-description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Date:</label>
+                    <input type="date" id="event-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-time">Time:</label>
+                    <input type="text" id="event-time" placeholder="e.g., 6:00 PM - 8:00 PM" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary" id="event-submit-btn">Add Event</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAddEventModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Announcement Modal -->
+    <div id="add-announcement-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddAnnouncementModal()">&times;</span>
+            <h2>Add Announcement</h2>
+            <form id="add-announcement-form">
+                <div class="form-group">
+                    <label for="announcement-title">Title:</label>
+                    <input type="text" id="announcement-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="announcement-content">Content:</label>
+                    <textarea id="announcement-content" rows="4" required></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Add Announcement</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAddAnnouncementModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
