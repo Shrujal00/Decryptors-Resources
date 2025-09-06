@@ -492,7 +492,7 @@ function handleLogin(e) {
     const password = document.getElementById('password').value;
     
     // Simple admin check (in production, use proper authentication)
-    if (username === 'admin' && password === 'codeclub2024') {
+    if (username === 'admin' && password === 'decryptors2025') {
         isAdmin = true;
         localStorage.setItem('isAdmin', 'true');
         
@@ -502,7 +502,7 @@ function handleLogin(e) {
         updateAdminUI();
         alert('Login successful! You can now edit resources.');
     } else {
-        alert('Invalid credentials. Use username: admin, password: codeclub2024');
+        alert('Invalid credentials. Please try again.');
     }
 }
 
