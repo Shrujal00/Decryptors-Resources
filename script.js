@@ -809,6 +809,125 @@ function deleteAnnouncement(announcementId) {
     alert('Announcement deleted successfully!');
 }
 
+// Resource Management Functions
+function openAddResourceModal() {
+    if (!isAdmin) {
+        alert('Please login as admin to add resources.');
+        return;
+    }
+    
+    if (!currentField) {
+        alert('Please navigate to a specific roadmap to add resources.');
+        return;
+    }
+    
+    document.getElementById('add-resource-form').reset();
+    document.getElementById('add-resource-modal').style.display = 'block';
+}
+
+function closeAddResourceModal() {
+    document.getElementById('add-resource-modal').style.display = 'none';
+    document.getElementById('add-resource-form').reset();
+}
+
+function handleAddResource(e) {
+    e.preventDefault();
+    
+    if (!isAdmin) {
+        alert('Please login as admin to manage resources.');
+        return;
+    }
+    
+    if (!currentField) {
+        alert('Please navigate to a specific roadmap to add resources.');
+        return;
+    }
+    
+    const title = document.getElementById('resource-title').value;
+    const url = document.getElementById('resource-url').value;
+    const description = document.getElementById('resource-description').value;
+    const type = document.getElementById('resource-type').value;
+    
+    // Initialize field resources if they don't exist
+    if (!allResources[currentField]) {
+        allResources[currentField] = { free: [], paid: [] };
+    }
+    
+    const newResource = {
+        id: Date.now(),
+        title,
+        url,
+        description
+    };
+    
+    allResources[currentField][type].push(newResource);
+    saveResources();
+    loadFieldResources(currentField);
+    closeAddResourceModal();
+    alert('Resource added successfully!');
+}
+
+function deleteResource(resourceId, type) {
+    if (!isAdmin) {
+        alert('Please login as admin to delete resources.');
+        return;
+    }
+    
+    if (!confirm('Are you sure you want to delete this resource?')) {
+        return;
+    }
+    
+    if (!currentField || !allResources[currentField]) {
+        return;
+    }
+    
+    allResources[currentField][type] = allResources[currentField][type].filter(
+        resource => resource.id !== resourceId
+    );
+    
+    saveResources();
+    loadFieldResources(currentField);
+    alert('Resource deleted successfully!');
+}
+
+function filterResources() {
+    const searchTerm = document.getElementById('resource-search').value.toLowerCase();
+    const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+    
+    const resourceItems = document.querySelectorAll('.resource-item');
+    
+    resourceItems.forEach(item => {
+        const title = item.querySelector('h4').textContent.toLowerCase();
+        const description = item.querySelector('p').textContent.toLowerCase();
+        const type = item.getAttribute('data-type');
+        
+        const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+        const matchesFilter = activeFilter === 'all' || activeFilter === type;
+        
+        if (matchesSearch && matchesFilter) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Initialize community pages
+function initializeCommunityPages() {
+    displayEvents();
+    displayAnnouncements();
+}
+
+// Update the DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+    setupEventListeners();
+    loadResources();
+    loadEvents();
+    loadAnnouncements();
+    initializeCommunityPages();
+});
+
 // Initialize collapsible categories as open by default
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
