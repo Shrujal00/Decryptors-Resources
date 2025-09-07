@@ -128,141 +128,247 @@ const roadmapData = {
     }
 };
 
-// Sample resources data
+// Default data for fallback
 const defaultResources = {
     fullstack: {
         free: [
-            { id: 1, title: 'freeCodeCamp', url: 'https://freecodecamp.org', description: 'Comprehensive web development curriculum' },
-            { id: 2, title: 'MDN Web Docs', url: 'https://developer.mozilla.org', description: 'Complete web development documentation' },
-            { id: 3, title: 'The Odin Project', url: 'https://theodinproject.com', description: 'Full-stack web development course' }
+            { id: '1', title: 'freeCodeCamp', url: 'https://freecodecamp.org', description: 'Comprehensive web development curriculum' },
+            { id: '2', title: 'MDN Web Docs', url: 'https://developer.mozilla.org', description: 'Complete web development documentation' },
+            { id: '3', title: 'The Odin Project', url: 'https://theodinproject.com', description: 'Full-stack web development course' }
         ],
         paid: [
-            { id: 4, title: 'Complete Web Developer Bootcamp', url: 'https://udemy.com', description: 'Comprehensive paid course on Udemy' },
-            { id: 5, title: 'Frontend Masters', url: 'https://frontendmasters.com', description: 'Advanced frontend development courses' }
+            { id: '4', title: 'Complete Web Developer Bootcamp', url: 'https://udemy.com', description: 'Comprehensive paid course on Udemy' },
+            { id: '5', title: 'Frontend Masters', url: 'https://frontendmasters.com', description: 'Advanced frontend development courses' }
         ]
     },
     app: {
         free: [
-            { id: 6, title: 'React Native Docs', url: 'https://reactnative.dev', description: 'Official React Native documentation' },
-            { id: 7, title: 'Flutter Documentation', url: 'https://flutter.dev', description: 'Official Flutter development guide' }
+            { id: '6', title: 'React Native Docs', url: 'https://reactnative.dev', description: 'Official React Native documentation' },
+            { id: '7', title: 'Flutter Documentation', url: 'https://flutter.dev', description: 'Official Flutter development guide' }
         ],
         paid: [
-            { id: 8, title: 'iOS Development Course', url: 'https://udemy.com', description: 'Complete iOS development with Swift' },
-            { id: 9, title: 'Android Development Nanodegree', url: 'https://udacity.com', description: 'Google-certified Android course' }
+            { id: '8', title: 'iOS Development Course', url: 'https://udemy.com', description: 'Complete iOS development with Swift' },
+            { id: '9', title: 'Android Development Nanodegree', url: 'https://udacity.com', description: 'Google-certified Android course' }
         ]
     },
     dsa: {
         free: [
-            { id: 10, title: 'LeetCode', url: 'https://leetcode.com', description: 'Practice coding problems and algorithms' },
-            { id: 11, title: 'GeeksforGeeks', url: 'https://geeksforgeeks.org', description: 'DSA tutorials and practice problems' }
+            { id: '10', title: 'LeetCode', url: 'https://leetcode.com', description: 'Practice coding problems and algorithms' },
+            { id: '11', title: 'GeeksforGeeks', url: 'https://geeksforgeeks.org', description: 'DSA tutorials and practice problems' }
         ],
         paid: [
-            { id: 12, title: 'AlgoExpert', url: 'https://algoexpert.io', description: 'Curated coding interview preparation' },
-            { id: 13, title: 'InterviewBit', url: 'https://interviewbit.com', description: 'Structured interview preparation platform' }
-        ]
-    },
-    cybersecurity: {
-        free: [
-            { id: 14, title: 'OWASP', url: 'https://owasp.org', description: 'Web application security knowledge base' },
-            { id: 15, title: 'Cybrary', url: 'https://cybrary.it', description: 'Free cybersecurity training platform' }
-        ],
-        paid: [
-            { id: 16, title: 'Ethical Hacking Course', url: 'https://udemy.com', description: 'Complete ethical hacking and penetration testing' },
-            { id: 17, title: 'CISSP Training', url: 'https://cissp.com', description: 'Professional security certification training' }
-        ]
-    },
-    network: {
-        free: [
-            { id: 18, title: 'Cisco Networking Academy', url: 'https://netacad.com', description: 'Free networking courses from Cisco' },
-            { id: 19, title: 'Network+ Study Guide', url: 'https://comptia.org', description: 'CompTIA Network+ certification resources' }
-        ],
-        paid: [
-            { id: 20, title: 'CCNA Complete Course', url: 'https://udemy.com', description: 'Cisco CCNA certification preparation' },
-            { id: 21, title: 'Network Engineering Bootcamp', url: 'https://networkengineering.com', description: 'Intensive network engineering training' }
-        ]
-    },
-    cloud: {
-        free: [
-            { id: 22, title: 'AWS Free Tier', url: 'https://aws.amazon.com/free', description: 'Free AWS services and training' },
-            { id: 23, title: 'Google Cloud Skills Boost', url: 'https://cloud.google.com', description: 'Free Google Cloud training' }
-        ],
-        paid: [
-            { id: 24, title: 'AWS Solutions Architect', url: 'https://acloudguru.com', description: 'Professional AWS certification course' },
-            { id: 25, title: 'Azure Fundamentals Course', url: 'https://pluralsight.com', description: 'Microsoft Azure comprehensive training' }
-        ]
-    },
-    datascience: {
-        free: [
-            { id: 26, title: 'Kaggle Learn', url: 'https://kaggle.com/learn', description: 'Free data science micro-courses' },
-            { id: 27, title: 'Python for Data Science', url: 'https://python.org', description: 'Official Python data science resources' }
-        ],
-        paid: [
-            { id: 28, title: 'Data Science Specialization', url: 'https://coursera.org', description: 'Johns Hopkins University data science course' },
-            { id: 29, title: 'DataCamp Subscription', url: 'https://datacamp.com', description: 'Interactive data science learning platform' }
-        ]
-    },
-    ml: {
-        free: [
-            { id: 30, title: 'Fast.ai', url: 'https://fast.ai', description: 'Practical machine learning for coders' },
-            { id: 31, title: 'Coursera ML Course', url: 'https://coursera.org', description: 'Andrew Ng\'s famous machine learning course' }
-        ],
-        paid: [
-            { id: 32, title: 'Machine Learning A-Z', url: 'https://udemy.com', description: 'Complete machine learning course on Udemy' },
-            { id: 33, title: 'DeepLearning.ai Specialization', url: 'https://deeplearning.ai', description: 'Advanced deep learning specialization' }
-        ]
-    },
-    ai: {
-        free: [
-            { id: 34, title: 'MIT AI Course', url: 'https://ocw.mit.edu', description: 'MIT\'s Introduction to Artificial Intelligence' },
-            { id: 35, title: 'OpenAI Resources', url: 'https://openai.com', description: 'AI research papers and resources' }
-        ],
-        paid: [
-            { id: 36, title: 'AI for Everyone', url: 'https://coursera.org', description: 'Non-technical AI course by Andrew Ng' },
-            { id: 37, title: 'Advanced AI Specialization', url: 'https://edx.org', description: 'University-level AI course specialization' }
+            { id: '12', title: 'AlgoExpert', url: 'https://algoexpert.io', description: 'Curated coding interview preparation' },
+            { id: '13', title: 'InterviewBit', url: 'https://interviewbit.com', description: 'Structured interview preparation platform' }
         ]
     }
 };
 
-// Default events data
 const defaultEvents = [
-    {
-        id: 1,
-        title: 'JavaScript Workshop',
-        description: 'Learn the fundamentals of JavaScript in this hands-on workshop.',
-        date: '2024-12-20',
-        time: '6:00 PM - 8:00 PM'
-    }
+    { id: '1', title: 'JavaScript Workshop', description: 'Learn the fundamentals of JavaScript in this hands-on workshop.', date: '2024-12-20', time: '6:00 PM - 8:00 PM' }
 ];
 
-// Default announcements data
 const defaultAnnouncements = [
-    {
-        id: 1,
-        title: 'Welcome to Decryptors!',
-        content: "We're excited to launch our new platform. Start exploring the roadmaps and join our growing community of learners.",
-        date: '2024-12-15'
-    }
+    { id: '1', title: 'Welcome to Decryptors!', content: "We're excited to launch our new platform. Start exploring the roadmaps and join our growing community of learners.", date: '2024-12-15' }
 ];
 
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-    setupEventListeners();
-    loadResources();
-    loadEvents();
-    loadAnnouncements();
+    console.log('DOM loaded, initializing app...');
+    
+    setTimeout(() => {
+        checkFirebaseConnection();
+        initializeApp();
+        setupEventListeners();
+        
+        if (window.isFirebaseEnabled) {
+            initializeFirebaseListeners();
+            seedDefaultData();
+        } else {
+            loadLocalData();
+        }
+        
+        // Initialize collapsible categories
+        setTimeout(() => {
+            const categories = document.querySelectorAll('.category-content');
+            categories.forEach(category => {
+                category.classList.add('active');
+                const header = category.previousElementSibling;
+                const icon = header.querySelector('i:last-child');
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            });
+        }, 100);
+    }, 1500);
 });
 
+function checkFirebaseConnection() {
+    try {
+        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+            window.isFirebaseEnabled = true;
+            console.log('Firebase connected successfully');
+        } else {
+            window.isFirebaseEnabled = false;
+            console.log('Firebase not available, using local storage');
+        }
+    } catch (error) {
+        window.isFirebaseEnabled = false;
+        console.log('Firebase error, using local storage:', error);
+    }
+}
+
+function loadLocalData() {
+    allResources = JSON.parse(localStorage.getItem('roadmapResources')) || defaultResources;
+    allEvents = JSON.parse(localStorage.getItem('communityEvents')) || defaultEvents;
+    allAnnouncements = JSON.parse(localStorage.getItem('communityAnnouncements')) || defaultAnnouncements;
+    
+    displayEvents();
+    displayAnnouncements();
+    console.log('Local data loaded');
+}
+
+async function seedDefaultData() {
+    try {
+        // Check if we need to upload local data to Firebase first
+        await uploadLocalDataToFirebase();
+        
+        // Then seed default data if collections are empty
+        const resourcesSnapshot = await resourcesCollection.get();
+        if (resourcesSnapshot.empty) {
+            console.log('Seeding default resources...');
+            for (const [field, data] of Object.entries(defaultResources)) {
+                await resourcesCollection.doc(field).set(data);
+            }
+        }
+
+        const eventsSnapshot = await eventsCollection.get();
+        if (eventsSnapshot.empty) {
+            console.log('Seeding default events...');
+            for (const event of defaultEvents) {
+                await eventsCollection.add(event);
+            }
+        }
+
+        const announcementsSnapshot = await announcementsCollection.get();
+        if (announcementsSnapshot.empty) {
+            console.log('Seeding default announcements...');
+            for (const announcement of defaultAnnouncements) {
+                await announcementsCollection.add(announcement);
+            }
+        }
+    } catch (error) {
+        console.error('Error seeding default data:', error);
+        loadLocalData();
+    }
+}
+
+// Add function to upload existing local data to Firebase
+async function uploadLocalDataToFirebase() {
+    try {
+        console.log('Checking for existing local data to upload...');
+        
+        // Upload local resources to Firebase
+        const localResources = JSON.parse(localStorage.getItem('roadmapResources'));
+        if (localResources && Object.keys(localResources).length > 0) {
+            console.log('Uploading local resources to Firebase...');
+            for (const [field, data] of Object.entries(localResources)) {
+                const fieldDoc = await resourcesCollection.doc(field).get();
+                if (!fieldDoc.exists) {
+                    await resourcesCollection.doc(field).set(data);
+                    console.log(`Uploaded ${field} resources to Firebase`);
+                }
+            }
+        }
+        
+        // Upload local events to Firebase
+        const localEvents = JSON.parse(localStorage.getItem('communityEvents'));
+        if (localEvents && localEvents.length > 0) {
+            console.log('Uploading local events to Firebase...');
+            const eventsSnapshot = await eventsCollection.get();
+            if (eventsSnapshot.empty) {
+                for (const event of localEvents) {
+                    const { id, ...eventData } = event; // Remove local id
+                    await eventsCollection.add(eventData);
+                }
+                console.log('Uploaded local events to Firebase');
+            }
+        }
+        
+        // Upload local announcements to Firebase
+        const localAnnouncements = JSON.parse(localStorage.getItem('communityAnnouncements'));
+        if (localAnnouncements && localAnnouncements.length > 0) {
+            console.log('Uploading local announcements to Firebase...');
+            const announcementsSnapshot = await announcementsCollection.get();
+            if (announcementsSnapshot.empty) {
+                for (const announcement of localAnnouncements) {
+                    const { id, ...announcementData } = announcement; // Remove local id
+                    await announcementsCollection.add(announcementData);
+                }
+                console.log('Uploaded local announcements to Firebase');
+            }
+        }
+        
+    } catch (error) {
+        console.error('Error uploading local data to Firebase:', error);
+    }
+}
+
+function initializeFirebaseListeners() {
+    if (!window.isFirebaseEnabled) return;
+
+    try {
+        // Listen for events with proper error handling
+        eventsListener = eventsCollection.onSnapshot((snapshot) => {
+            console.log('Events snapshot received, size:', snapshot.size);
+            allEvents = [];
+            snapshot.forEach((doc) => {
+                allEvents.push({ id: doc.id, ...doc.data() });
+            });
+            displayEvents();
+            console.log('Events synced from Firebase:', allEvents.length);
+        }, (error) => {
+            console.error('Events listener error:', error);
+            loadLocalData();
+        });
+
+        // Listen for announcements with proper error handling
+        announcementsListener = announcementsCollection.onSnapshot((snapshot) => {
+            console.log('Announcements snapshot received, size:', snapshot.size);
+            allAnnouncements = [];
+            snapshot.forEach((doc) => {
+                allAnnouncements.push({ id: doc.id, ...doc.data() });
+            });
+            displayAnnouncements();
+            console.log('Announcements synced from Firebase:', allAnnouncements.length);
+        }, (error) => {
+            console.error('Announcements listener error:', error);
+            loadLocalData();
+        });
+
+        // Listen for resources with proper error handling
+        resourcesListener = resourcesCollection.onSnapshot((snapshot) => {
+            allResources = {};
+            snapshot.forEach((doc) => {
+                allResources[doc.id] = doc.data();
+            });
+            if (currentField) {
+                loadFieldResources(currentField);
+            }
+            console.log('Resources synced from Firebase');
+        }, (error) => {
+            console.error('Resources listener error:', error);
+            loadLocalData();
+        });
+    } catch (error) {
+        console.error('Error setting up Firebase listeners:', error);
+        loadLocalData();
+    }
+}
+
 function initializeApp() {
-    // Check admin status
     isAdmin = localStorage.getItem('isAdmin') === 'true';
     updateAdminUI();
-    
-    // Generate roadmap cards
     generateRoadmapCards();
-    
-    // Show home page by default
     showPage('home');
+    console.log('App initialized');
 }
 
 function setupEventListeners() {
@@ -290,33 +396,40 @@ function setupEventListeners() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-    });
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    }
 
     // Close mobile menu when clicking on a link
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+            if (hamburger && navMenu) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
         });
     });
 
-    // Admin login form
-    document.getElementById('login-form').addEventListener('submit', handleLogin);
+    // Forms
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) loginForm.addEventListener('submit', handleLogin);
 
-    // Add resource form
-    document.getElementById('add-resource-form').addEventListener('submit', handleAddResource);
+    const addResourceForm = document.getElementById('add-resource-form');
+    if (addResourceForm) addResourceForm.addEventListener('submit', handleAddResource);
 
-    // Add event form
-    document.getElementById('add-event-form').addEventListener('submit', handleAddEvent);
-    
-    // Add announcement form
-    document.getElementById('add-announcement-form').addEventListener('submit', handleAddAnnouncement);
+    const addEventForm = document.getElementById('add-event-form');
+    if (addEventForm) addEventForm.addEventListener('submit', handleAddEvent);
+
+    const addAnnouncementForm = document.getElementById('add-announcement-form');
+    if (addAnnouncementForm) addAnnouncementForm.addEventListener('submit', handleAddAnnouncement);
 
     // Search and filter
-    document.getElementById('resource-search').addEventListener('input', filterResources);
+    const resourceSearch = document.getElementById('resource-search');
+    if (resourceSearch) resourceSearch.addEventListener('input', filterResources);
+    
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -331,19 +444,17 @@ function setupEventListeners() {
         const eventModal = document.getElementById('add-event-modal');
         const announcementModal = document.getElementById('add-announcement-modal');
         
-        if (e.target === resourceModal) {
-            closeAddResourceModal();
-        }
-        if (e.target === eventModal) {
-            closeAddEventModal();
-        }
-        if (e.target === announcementModal) {
-            closeAddAnnouncementModal();
-        }
+        if (e.target === resourceModal) closeAddResourceModal();
+        if (e.target === eventModal) closeAddEventModal();
+        if (e.target === announcementModal) closeAddAnnouncementModal();
     });
+
+    console.log('Event listeners set up complete');
 }
 
 function showPage(page, field = '') {
+    console.log('Showing page:', page, field);
+    
     // Hide all pages
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     
@@ -359,6 +470,9 @@ function showPage(page, field = '') {
         if (page === 'roadmap' && field) {
             currentField = field;
             loadRoadmap(field);
+        } else if (page === 'community') {
+            displayEvents();
+            displayAnnouncements();
         }
     }
 
@@ -394,10 +508,8 @@ function loadRoadmap(field) {
     const roadmap = roadmapData[field];
     if (!roadmap) return;
 
-    // Update title
     document.getElementById('roadmap-title').textContent = roadmap.title;
 
-    // Generate timeline
     const timeline = document.getElementById('roadmap-timeline');
     timeline.innerHTML = '';
 
@@ -416,38 +528,29 @@ function loadRoadmap(field) {
         timeline.appendChild(timelineItem);
     });
 
-    // Load resources for this field
     loadFieldResources(field);
-}
-
-function loadResources() {
-    // Load from localStorage or use defaults
-    const saved = localStorage.getItem('roadmapResources');
-    allResources = saved ? JSON.parse(saved) : defaultResources;
-}
-
-function saveResources() {
-    localStorage.setItem('roadmapResources', JSON.stringify(allResources));
 }
 
 function loadFieldResources(field) {
     const fieldResources = allResources[field] || { free: [], paid: [] };
     
-    // Load free resources
     const freeList = document.getElementById('free-resources-list');
-    freeList.innerHTML = '';
-    fieldResources.free.forEach(resource => {
-        freeList.appendChild(createResourceElement(resource, 'free'));
-    });
-
-    // Load paid resources
     const paidList = document.getElementById('paid-resources-list');
-    paidList.innerHTML = '';
-    fieldResources.paid.forEach(resource => {
-        paidList.appendChild(createResourceElement(resource, 'paid'));
-    });
+    
+    if (freeList) {
+        freeList.innerHTML = '';
+        fieldResources.free.forEach(resource => {
+            freeList.appendChild(createResourceElement(resource, 'free'));
+        });
+    }
 
-    // Show/hide admin controls
+    if (paidList) {
+        paidList.innerHTML = '';
+        fieldResources.paid.forEach(resource => {
+            paidList.appendChild(createResourceElement(resource, 'paid'));
+        });
+    }
+
     updateAdminUI();
 }
 
@@ -461,93 +564,16 @@ function createResourceElement(resource, type) {
         <h4>${resource.title}</h4>
         <p>${resource.description}</p>
         <a href="${resource.url}" target="_blank" rel="noopener noreferrer">Visit Resource <i class="fas fa-external-link-alt"></i></a>
+        ${isAdmin ? `
         <div class="resource-actions">
-            <button class="action-btn delete" onclick="deleteResource(${resource.id}, '${type}')" title="Delete">
+            <button class="action-btn delete" onclick="deleteResource('${resource.id}', '${type}')" title="Delete">
                 <i class="fas fa-trash"></i>
             </button>
         </div>
+        ` : ''}
     `;
     
     return div;
-}
-
-function toggleCategory(categoryId) {
-    const category = document.getElementById(categoryId);
-    const header = category.previousElementSibling;
-    const icon = header.querySelector('i:last-child');
-    
-    category.classList.toggle('active');
-    
-    if (category.classList.contains('active')) {
-        icon.style.transform = 'rotate(180deg)';
-    } else {
-        icon.style.transform = 'rotate(0deg)';
-    }
-}
-
-function handleLogin(e) {
-    e.preventDefault();
-    
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    
-    // Simple admin check (in production, use proper authentication)
-    if (username === 'admin' && password === 'decryptors2025') {
-        isAdmin = true;
-        localStorage.setItem('isAdmin', 'true');
-        
-        document.getElementById('admin-login').style.display = 'none';
-        document.getElementById('admin-dashboard').style.display = 'block';
-        
-        updateAdminUI();
-        alert('Login successful! You can now edit resources.');
-    } else {
-        alert('Invalid credentials. Please try again.');
-    }
-}
-
-function logout() {
-    isAdmin = false;
-    localStorage.removeItem('isAdmin');
-    
-    document.getElementById('admin-login').style.display = 'block';
-    document.getElementById('admin-dashboard').style.display = 'none';
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    
-    updateAdminUI();
-}
-
-function updateAdminUI() {
-    const adminControls = document.getElementById('admin-controls');
-    const eventAdminControls = document.getElementById('event-admin-controls');
-    const announcementAdminControls = document.getElementById('announcement-admin-controls');
-    const resourceActions = document.querySelectorAll('.resource-actions');
-    const itemActions = document.querySelectorAll('.item-actions');
-    
-    if (isAdmin) {
-        if (adminControls) adminControls.style.display = 'block';
-        if (eventAdminControls) eventAdminControls.style.display = 'block';
-        if (announcementAdminControls) announcementAdminControls.style.display = 'block';
-        resourceActions.forEach(action => action.style.display = 'flex');
-        itemActions.forEach(action => action.style.display = 'flex');
-    } else {
-        if (adminControls) adminControls.style.display = 'none';
-        if (eventAdminControls) eventAdminControls.style.display = 'none';
-        if (announcementAdminControls) announcementAdminControls.style.display = 'none';
-        resourceActions.forEach(action => action.style.display = 'none');
-        itemActions.forEach(action => action.style.display = 'none');
-    }
-}
-
-// Event Management Functions
-function loadEvents() {
-    const saved = localStorage.getItem('communityEvents');
-    allEvents = saved ? JSON.parse(saved) : defaultEvents;
-}
-
-function saveEvents() {
-    localStorage.setItem('communityEvents', JSON.stringify(allEvents));
 }
 
 function displayEvents() {
@@ -586,128 +612,19 @@ function createEventElement(event) {
             <p>${event.description}</p>
             <span class="event-time">${event.time}</span>
         </div>
+        ${isAdmin ? `
         <div class="item-actions">
-            <button class="action-btn edit" onclick="editEvent(${event.id})" title="Edit">
+            <button class="action-btn edit" onclick="editEvent('${event.id}')" title="Edit">
                 <i class="fas fa-edit"></i>
             </button>
-            <button class="action-btn delete" onclick="deleteEvent(${event.id})" title="Delete">
+            <button class="action-btn delete" onclick="deleteEvent('${event.id}')" title="Delete">
                 <i class="fas fa-trash"></i>
             </button>
         </div>
+        ` : ''}
     `;
     
     return div;
-}
-
-function openAddEventModal() {
-    if (!isAdmin) {
-        alert('Please login as admin to add events.');
-        return;
-    }
-    
-    editingEventId = null;
-    document.getElementById('event-modal-title').textContent = 'Add Event';
-    document.getElementById('event-submit-btn').textContent = 'Add Event';
-    document.getElementById('add-event-form').reset();
-    document.getElementById('add-event-modal').style.display = 'block';
-}
-
-function closeAddEventModal() {
-    document.getElementById('add-event-modal').style.display = 'none';
-    document.getElementById('add-event-form').reset();
-    editingEventId = null;
-}
-
-function handleAddEvent(e) {
-    e.preventDefault();
-    
-    if (!isAdmin) {
-        alert('Please login as admin to manage events.');
-        return;
-    }
-    
-    const title = document.getElementById('event-title').value;
-    const description = document.getElementById('event-description').value;
-    const date = document.getElementById('event-date').value;
-    const time = document.getElementById('event-time').value;
-    
-    if (editingEventId) {
-        // Edit existing event
-        const eventIndex = allEvents.findIndex(event => event.id === editingEventId);
-        if (eventIndex !== -1) {
-            allEvents[eventIndex] = {
-                ...allEvents[eventIndex],
-                title,
-                description,
-                date,
-                time
-            };
-        }
-        alert('Event updated successfully!');
-    } else {
-        // Add new event
-        const newEvent = {
-            id: Date.now(),
-            title,
-            description,
-            date,
-            time
-        };
-        
-        allEvents.push(newEvent);
-        alert('Event added successfully!');
-    }
-    
-    saveEvents();
-    displayEvents();
-    closeAddEventModal();
-}
-
-function editEvent(eventId) {
-    if (!isAdmin) {
-        alert('Please login as admin to edit events.');
-        return;
-    }
-    
-    const event = allEvents.find(e => e.id === eventId);
-    if (!event) return;
-    
-    editingEventId = eventId;
-    document.getElementById('event-modal-title').textContent = 'Edit Event';
-    document.getElementById('event-submit-btn').textContent = 'Update Event';
-    
-    document.getElementById('event-title').value = event.title;
-    document.getElementById('event-description').value = event.description;
-    document.getElementById('event-date').value = event.date;
-    document.getElementById('event-time').value = event.time;
-    
-    document.getElementById('add-event-modal').style.display = 'block';
-}
-
-function deleteEvent(eventId) {
-    if (!isAdmin) {
-        alert('Please login as admin to delete events.');
-        return;
-    }
-    
-    if (!confirm('Are you sure you want to delete this event?')) {
-        return;
-    }
-    
-    allEvents = allEvents.filter(event => event.id !== eventId);
-    saveEvents();
-    displayEvents();
-    alert('Event deleted successfully!');
-}
-
-// Announcement Management Functions
-function loadAnnouncements() {
-    const saved = localStorage.getItem('communityAnnouncements');
-    allAnnouncements = saved ? JSON.parse(saved) : defaultAnnouncements;
-}
-
-function saveAnnouncements() {
-    localStorage.setItem('communityAnnouncements', JSON.stringify(allAnnouncements));
 }
 
 function displayAnnouncements() {
@@ -743,73 +660,173 @@ function createAnnouncementElement(announcement) {
         <div class="announcement-date">${formattedDate}</div>
         <h3>${announcement.title}</h3>
         <p>${announcement.content}</p>
+        ${isAdmin ? `
         <div class="item-actions">
-            <button class="action-btn delete" onclick="deleteAnnouncement(${announcement.id})" title="Delete">
+            <button class="action-btn delete" onclick="deleteAnnouncement('${announcement.id}')" title="Delete">
                 <i class="fas fa-trash"></i>
             </button>
         </div>
+        ` : ''}
     `;
     
     return div;
 }
 
-function openAddAnnouncementModal() {
-    if (!isAdmin) {
-        alert('Please login as admin to add announcements.');
-        return;
-    }
-    
-    document.getElementById('add-announcement-form').reset();
-    document.getElementById('add-announcement-modal').style.display = 'block';
-}
-
-function closeAddAnnouncementModal() {
-    document.getElementById('add-announcement-modal').style.display = 'none';
-    document.getElementById('add-announcement-form').reset();
-}
-
-function handleAddAnnouncement(e) {
+// Admin functions
+function handleLogin(e) {
     e.preventDefault();
     
-    if (!isAdmin) {
-        alert('Please login as admin to manage announcements.');
-        return;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    if (username === 'admin' && password === 'decryptors2025') {
+        isAdmin = true;
+        localStorage.setItem('isAdmin', 'true');
+        
+        document.getElementById('admin-login').style.display = 'none';
+        document.getElementById('admin-dashboard').style.display = 'block';
+        
+        updateAdminUI();
+        alert('Login successful! You can now edit resources.');
+    } else {
+        alert('Invalid credentials. Please try again.');
     }
-    
-    const title = document.getElementById('announcement-title').value;
-    const content = document.getElementById('announcement-content').value;
-    
-    const newAnnouncement = {
-        id: Date.now(),
-        title,
-        content,
-        date: new Date().toISOString().split('T')[0]
-    };
-    
-    allAnnouncements.unshift(newAnnouncement); // Add to beginning
-    saveAnnouncements();
-    displayAnnouncements();
-    closeAddAnnouncementModal();
-    alert('Announcement added successfully!');
 }
 
-function deleteAnnouncement(announcementId) {
-    if (!isAdmin) {
-        alert('Please login as admin to delete announcements.');
-        return;
-    }
+function logout() {
+    isAdmin = false;
+    localStorage.removeItem('isAdmin');
     
-    if (!confirm('Are you sure you want to delete this announcement?')) {
-        return;
-    }
+    document.getElementById('admin-login').style.display = 'block';
+    document.getElementById('admin-dashboard').style.display = 'none';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
     
-    allAnnouncements = allAnnouncements.filter(announcement => announcement.id !== announcementId);
-    saveAnnouncements();
-    displayAnnouncements();
-    alert('Announcement deleted successfully!');
+    updateAdminUI();
 }
 
-// Resource Management Functions
+function editEvent(eventId) {
+    if (!isAdmin) return;
+    
+    const event = allEvents.find(e => e.id === eventId);
+    if (!event) return;
+    
+    editingEventId = eventId;
+    document.getElementById('event-modal-title').textContent = 'Edit Event';
+    document.getElementById('event-submit-btn').textContent = 'Update Event';
+    
+    document.getElementById('event-title').value = event.title;
+    document.getElementById('event-description').value = event.description;
+    document.getElementById('event-date').value = event.date;
+    document.getElementById('event-time').value = event.time;
+    
+    document.getElementById('add-event-modal').style.display = 'block';
+}
+
+async function deleteEvent(eventId) {
+    if (!isAdmin || !confirm('Are you sure you want to delete this event?')) return;
+    
+    console.log('Attempting to delete event:', eventId);
+    
+    try {
+        if (window.isFirebaseEnabled && typeof eventsCollection !== 'undefined') {
+            console.log('Deleting event from Firebase...');
+            
+            // Delete from Firebase
+            await eventsCollection.doc(eventId).delete();
+            console.log('Event deleted from Firebase successfully');
+            
+            // Immediately update local array and UI
+            allEvents = allEvents.filter(e => e.id !== eventId);
+            displayEvents();
+            
+        } else {
+            console.log('Deleting event from local storage...');
+            allEvents = allEvents.filter(e => e.id !== eventId);
+            saveEvents();
+            displayEvents();
+        }
+        
+        console.log('Event deleted and UI updated');
+        
+    } catch (error) {
+        console.error('Error deleting event:', error);
+        alert('Error deleting event: ' + error.message);
+    }
+}
+
+// Force refresh function for admin
+async function refreshAllData() {
+    if (!window.isFirebaseEnabled) {
+        loadLocalData();
+        return;
+    }
+    
+    try {
+        console.log('Refreshing all data from Firebase...');
+        
+        // Refresh events
+        const eventsSnapshot = await eventsCollection.get();
+        allEvents = [];
+        eventsSnapshot.forEach((doc) => {
+            allEvents.push({ id: doc.id, ...doc.data() });
+        });
+        displayEvents();
+        
+        // Refresh announcements
+        const announcementsSnapshot = await announcementsCollection.get();
+        allAnnouncements = [];
+        announcementsSnapshot.forEach((doc) => {
+            allAnnouncements.push({ id: doc.id, ...doc.data() });
+        });
+        displayAnnouncements();
+        
+        console.log('Data refreshed successfully');
+        alert('Data refreshed from Firebase!');
+    } catch (error) {
+        console.error('Error refreshing data:', error);
+        alert('Error refreshing data: ' + error.message);
+    }
+}
+
+// Enhanced admin dashboard with refresh functionality
+function updateAdminUI() {
+    const adminControls = document.getElementById('admin-controls');
+    const eventAdminControls = document.getElementById('event-admin-controls');
+    const announcementAdminControls = document.getElementById('announcement-admin-controls');
+    
+    if (isAdmin) {
+        if (adminControls) {
+            adminControls.style.display = 'block';
+            // Add refresh button if not exists
+            if (!document.getElementById('refresh-data-btn')) {
+                const refreshBtn = document.createElement('button');
+                refreshBtn.id = 'refresh-data-btn';
+                refreshBtn.className = 'btn btn-secondary';
+                refreshBtn.innerHTML = '<i class="fas fa-refresh"></i> Refresh Data';
+                refreshBtn.onclick = refreshAllData;
+                adminControls.appendChild(refreshBtn);
+            }
+            // Add sync button if not exists
+            if (!document.getElementById('sync-firebase-btn')) {
+                const syncBtn = document.createElement('button');
+                syncBtn.id = 'sync-firebase-btn';
+                syncBtn.className = 'btn btn-secondary';
+                syncBtn.innerHTML = '<i class="fas fa-sync"></i> Sync to Firebase';
+                syncBtn.onclick = syncAllDataToFirebase;
+                adminControls.appendChild(syncBtn);
+            }
+        }
+        if (eventAdminControls) eventAdminControls.style.display = 'block';
+        if (announcementAdminControls) announcementAdminControls.style.display = 'block';
+    } else {
+        if (adminControls) adminControls.style.display = 'none';
+        if (eventAdminControls) eventAdminControls.style.display = 'none';
+        if (announcementAdminControls) announcementAdminControls.style.display = 'none';
+    }
+}
+
+// Modal functions
 function openAddResourceModal() {
     if (!isAdmin) {
         alert('Please login as admin to add resources.');
@@ -830,75 +847,307 @@ function closeAddResourceModal() {
     document.getElementById('add-resource-form').reset();
 }
 
-function handleAddResource(e) {
+function openAddEventModal() {
+    if (!isAdmin) {
+        alert('Please login as admin to add events.');
+        return;
+    }
+    
+    editingEventId = null;
+    document.getElementById('event-modal-title').textContent = 'Add Event';
+    document.getElementById('event-submit-btn').textContent = 'Add Event';
+    document.getElementById('add-event-form').reset();
+    document.getElementById('add-event-modal').style.display = 'block';
+}
+
+function closeAddEventModal() {
+    document.getElementById('add-event-modal').style.display = 'none';
+    document.getElementById('add-event-form').reset();
+    editingEventId = null;
+}
+
+function openAddAnnouncementModal() {
+    if (!isAdmin) {
+        alert('Please login as admin to add announcements.');
+        return;
+    }
+    
+    document.getElementById('add-announcement-form').reset();
+    document.getElementById('add-announcement-modal').style.display = 'block';
+}
+
+function closeAddAnnouncementModal() {
+    document.getElementById('add-announcement-modal').style.display = 'none';
+    document.getElementById('add-announcement-form').reset();
+}
+
+// CRUD operations
+async function handleAddResource(e) {
     e.preventDefault();
     
-    if (!isAdmin) {
-        alert('Please login as admin to manage resources.');
-        return;
-    }
-    
-    if (!currentField) {
-        alert('Please navigate to a specific roadmap to add resources.');
-        return;
-    }
+    if (!isAdmin) return;
     
     const title = document.getElementById('resource-title').value;
     const url = document.getElementById('resource-url').value;
     const description = document.getElementById('resource-description').value;
     const type = document.getElementById('resource-type').value;
     
-    // Initialize field resources if they don't exist
-    if (!allResources[currentField]) {
-        allResources[currentField] = { free: [], paid: [] };
-    }
-    
     const newResource = {
-        id: Date.now(),
+        id: Date.now().toString(),
         title,
         url,
-        description
+        description,
+        createdAt: new Date().toISOString()
     };
-    
-    allResources[currentField][type].push(newResource);
-    saveResources();
-    loadFieldResources(currentField);
-    closeAddResourceModal();
-    alert('Resource added successfully!');
+
+    try {
+        if (window.isFirebaseEnabled && typeof resourcesCollection !== 'undefined') {
+            console.log('Adding resource to Firebase...');
+            const fieldDoc = resourcesCollection.doc(currentField);
+            const fieldData = await fieldDoc.get();
+            
+            let fieldResources = fieldData.exists ? fieldData.data() : { free: [], paid: [] };
+            if (!fieldResources[type]) fieldResources[type] = [];
+            
+            fieldResources[type].push(newResource);
+            await fieldDoc.set(fieldResources);
+            console.log('Resource added to Firebase successfully');
+        } else {
+            console.log('Adding resource to local storage...');
+            if (!allResources[currentField]) allResources[currentField] = { free: [], paid: [] };
+            allResources[currentField][type].push(newResource);
+            saveResources();
+            loadFieldResources(currentField);
+        }
+        
+        closeAddResourceModal();
+        alert('Resource added successfully!');
+    } catch (error) {
+        console.error('Error adding resource:', error);
+        alert('Error adding resource: ' + error.message);
+    }
 }
 
-function deleteResource(resourceId, type) {
+async function deleteResource(resourceId, type) {
+    if (!isAdmin || !confirm('Are you sure you want to delete this resource?')) return;
+    
+    try {
+        if (window.isFirebaseEnabled && typeof resourcesCollection !== 'undefined') {
+            console.log('Deleting resource from Firebase...');
+            const fieldDoc = resourcesCollection.doc(currentField);
+            const fieldData = await fieldDoc.get();
+            
+            if (fieldData.exists) {
+                let fieldResources = fieldData.data();
+                if (fieldResources[type]) {
+                    fieldResources[type] = fieldResources[type].filter(r => r.id !== resourceId);
+                    await fieldDoc.set(fieldResources);
+                    console.log('Resource deleted from Firebase successfully');
+                }
+            }
+        } else {
+            console.log('Deleting resource from local storage...');
+            if (allResources[currentField] && allResources[currentField][type]) {
+                allResources[currentField][type] = allResources[currentField][type].filter(r => r.id !== resourceId);
+                saveResources();
+                loadFieldResources(currentField);
+            }
+        }
+        alert('Resource deleted successfully!');
+    } catch (error) {
+        console.error('Error deleting resource:', error);
+        alert('Error deleting resource: ' + error.message);
+    }
+}
+
+async function handleAddEvent(e) {
+    e.preventDefault();
+    if (!isAdmin) return;
+    
+    const title = document.getElementById('event-title').value;
+    const description = document.getElementById('event-description').value;
+    const date = document.getElementById('event-date').value;
+    const time = document.getElementById('event-time').value;
+    
+    const eventData = { 
+        title, 
+        description, 
+        date, 
+        time,
+        createdAt: new Date().toISOString()
+    };
+
+    try {
+        if (window.isFirebaseEnabled && typeof eventsCollection !== 'undefined') {
+            console.log('Adding event to Firebase...');
+            if (editingEventId) {
+                await eventsCollection.doc(editingEventId).update({
+                    ...eventData,
+                    updatedAt: new Date().toISOString()
+                });
+                console.log('Event updated in Firebase successfully');
+            } else {
+                await eventsCollection.add(eventData);
+                console.log('Event added to Firebase successfully');
+            }
+        } else {
+            console.log('Adding event to local storage...');
+            if (editingEventId) {
+                const index = allEvents.findIndex(e => e.id === editingEventId);
+                if (index !== -1) allEvents[index] = { ...allEvents[index], ...eventData };
+            } else {
+                allEvents.push({ id: Date.now().toString(), ...eventData });
+            }
+            saveEvents();
+            displayEvents();
+        }
+        
+        closeAddEventModal();
+        alert('Event saved successfully!');
+    } catch (error) {
+        console.error('Error saving event:', error);
+        alert('Error saving event: ' + error.message);
+    }
+}
+
+async function deleteEvent(eventId) {
+    if (!isAdmin || !confirm('Are you sure you want to delete this event?')) return;
+    
+    console.log('Attempting to delete event:', eventId);
+    
+    try {
+        if (window.isFirebaseEnabled && typeof eventsCollection !== 'undefined') {
+            console.log('Deleting event from Firebase...');
+            
+            // Delete from Firebase
+            await eventsCollection.doc(eventId).delete();
+            console.log('Event deleted from Firebase successfully');
+            
+            // Immediately update local array and UI
+            allEvents = allEvents.filter(e => e.id !== eventId);
+            displayEvents();
+            
+        } else {
+            console.log('Deleting event from local storage...');
+            allEvents = allEvents.filter(e => e.id !== eventId);
+            saveEvents();
+            displayEvents();
+        }
+        
+        console.log('Event deleted and UI updated');
+        
+    } catch (error) {
+        console.error('Error deleting event:', error);
+        alert('Error deleting event: ' + error.message);
+    }
+}
+
+async function handleAddAnnouncement(e) {
+    e.preventDefault();
+    if (!isAdmin) return;
+    
+    const title = document.getElementById('announcement-title').value;
+    const content = document.getElementById('announcement-content').value;
+    
+    const announcementData = {
+        title,
+        content,
+        date: new Date().toISOString().split('T')[0],
+        createdAt: new Date().toISOString()
+    };
+
+    try {
+        if (window.isFirebaseEnabled && typeof announcementsCollection !== 'undefined') {
+            console.log('Adding announcement to Firebase...');
+            await announcementsCollection.add(announcementData);
+            console.log('Announcement added to Firebase successfully');
+        } else {
+            console.log('Adding announcement to local storage...');
+            allAnnouncements.unshift({ id: Date.now().toString(), ...announcementData });
+            saveAnnouncements();
+            displayAnnouncements();
+        }
+        
+        closeAddAnnouncementModal();
+        alert('Announcement added successfully!');
+    } catch (error) {
+        console.error('Error adding announcement:', error);
+        alert('Error adding announcement: ' + error.message);
+    }
+}
+
+async function deleteAnnouncement(announcementId) {
+    if (!isAdmin || !confirm('Are you sure you want to delete this announcement?')) return;
+    
+    try {
+        if (window.isFirebaseEnabled && typeof announcementsCollection !== 'undefined') {
+            console.log('Deleting announcement from Firebase...');
+            await announcementsCollection.doc(announcementId).delete();
+            console.log('Announcement deleted from Firebase successfully');
+        } else {
+            console.log('Deleting announcement from local storage...');
+            allAnnouncements = allAnnouncements.filter(a => a.id !== announcementId);
+            saveAnnouncements();
+            displayAnnouncements();
+        }
+        alert('Announcement deleted successfully!');
+    } catch (error) {
+        console.error('Error deleting announcement:', error);
+        alert('Error deleting announcement: ' + error.message);
+    }
+}
+
+// Add function to manually sync all data to Firebase (for admin use)
+async function syncAllDataToFirebase() {
     if (!isAdmin) {
-        alert('Please login as admin to delete resources.');
+        alert('Admin access required');
         return;
     }
     
-    if (!confirm('Are you sure you want to delete this resource?')) {
+    if (!window.isFirebaseEnabled) {
+        alert('Firebase not available');
         return;
     }
     
-    if (!currentField || !allResources[currentField]) {
+    if (!confirm('This will upload all local data to Firebase. Continue?')) {
         return;
     }
     
-    allResources[currentField][type] = allResources[currentField][type].filter(
-        resource => resource.id !== resourceId
-    );
+    try {
+        await uploadLocalDataToFirebase();
+        alert('All data synced to Firebase successfully!');
+    } catch (error) {
+        console.error('Error syncing data:', error);
+        alert('Error syncing data: ' + error.message);
+    }
+}
+
+// Utility functions
+function toggleCategory(categoryId) {
+    const category = document.getElementById(categoryId);
+    if (!category) return;
     
-    saveResources();
-    loadFieldResources(currentField);
-    alert('Resource deleted successfully!');
+    const header = category.previousElementSibling;
+    const icon = header.querySelector('i:last-child');
+    
+    category.classList.toggle('active');
+    
+    if (category.classList.contains('active')) {
+        icon.style.transform = 'rotate(180deg)';
+    } else {
+        icon.style.transform = 'rotate(0deg)';
+    }
 }
 
 function filterResources() {
-    const searchTerm = document.getElementById('resource-search').value.toLowerCase();
-    const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+    const searchTerm = document.getElementById('resource-search')?.value.toLowerCase() || '';
+    const activeFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
     
     const resourceItems = document.querySelectorAll('.resource-item');
     
     resourceItems.forEach(item => {
-        const title = item.querySelector('h4').textContent.toLowerCase();
-        const description = item.querySelector('p').textContent.toLowerCase();
+        const title = item.querySelector('h4')?.textContent.toLowerCase() || '';
+        const description = item.querySelector('p')?.textContent.toLowerCase() || '';
         const type = item.getAttribute('data-type');
         
         const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
@@ -912,33 +1161,22 @@ function filterResources() {
     });
 }
 
-// Initialize community pages
-function initializeCommunityPages() {
-    displayEvents();
-    displayAnnouncements();
+// Local storage functions
+function saveResources() {
+    localStorage.setItem('roadmapResources', JSON.stringify(allResources));
 }
 
-// Update the DOMContentLoaded event listener
-document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-    setupEventListeners();
-    loadResources();
-    loadEvents();
-    loadAnnouncements();
-    initializeCommunityPages();
-});
+function saveEvents() {
+    localStorage.setItem('communityEvents', JSON.stringify(allEvents));
+}
 
-// Initialize collapsible categories as open by default
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        const categories = document.querySelectorAll('.category-content');
-        categories.forEach(category => {
-            category.classList.add('active');
-            const header = category.previousElementSibling;
-            const icon = header.querySelector('i:last-child');
-            if (icon) {
-                icon.style.transform = 'rotate(180deg)';
-            }
-        });
-    }, 100);
+function saveAnnouncements() {
+    localStorage.setItem('communityAnnouncements', JSON.stringify(allAnnouncements));
+}
+
+// Clean up listeners
+window.addEventListener('beforeunload', () => {
+    if (typeof eventsListener !== 'undefined' && eventsListener) eventsListener();
+    if (typeof announcementsListener !== 'undefined' && announcementsListener) announcementsListener();
+    if (typeof resourcesListener !== 'undefined' && resourcesListener) resourcesListener();
 });
