@@ -34,12 +34,10 @@ try {
     if (firebase.apps.length > 0) {
         isFirebaseEnabled = true;
         console.log('Firebase initialized successfully');
-        window.isFirebaseEnabled = true;
     }
 } catch (error) {
     console.error('Firebase initialization error:', error);
     isFirebaseEnabled = false;
-    window.isFirebaseEnabled = false;
 }
 
 // Export for global access

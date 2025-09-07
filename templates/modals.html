@@ -1,0 +1,121 @@
+<!-- Add Resource Modal -->
+<div id="add-resource-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddResourceModal()">&times;</span>
+        <h2>Add Resource</h2>
+        <form id="add-resource-form">
+            <div class="form-group">
+                <label for="resource-title">Title:</label>
+                <input type="text" id="resource-title" required>
+            </div>
+            <div class="form-group">
+                <label for="resource-url">URL:</label>
+                <input type="url" id="resource-url" required>
+            </div>
+            <div class="form-group">
+                <label for="resource-description">Description:</label>
+                <textarea id="resource-description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="resource-type">Type:</label>
+                <select id="resource-type" required>
+                    <option value="free">Free</option>
+                    <option value="paid">Paid</option>
+                </select>
+            </div>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">Add Resource</button>
+                <button type="button" class="btn btn-secondary" onclick="closeAddResourceModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Event Modal -->
+<div id="add-event-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddEventModal()">&times;</span>
+        <h2 id="event-modal-title">Add Event</h2>
+        <form id="add-event-form">
+            <div class="form-group">
+                <label for="event-title">Event Title:</label>
+                <input type="text" id="event-title" required>
+            </div>
+            <div class="form-group">
+                <label for="event-description">Description:</label>
+                <textarea id="event-description" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="event-date">Date:</label>
+                <input type="date" id="event-date" required>
+            </div>
+            <div class="form-group">
+                <label for="event-time">Time:</label>
+                <input type="text" id="event-time" placeholder="e.g., 6:00 PM - 8:00 PM" required>
+            </div>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary" id="event-submit-btn">Add Event</button>
+                <button type="button" class="btn btn-secondary" onclick="closeAddEventModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Announcement Modal -->
+<div id="add-announcement-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddAnnouncementModal()">&times;</span>
+        <h2>Add Announcement</h2>
+        <form id="add-announcement-form">
+            <div class="form-group">
+                <label for="announcement-title">Title:</label>
+                <input type="text" id="announcement-title" required>
+            </div>
+            <div class="form-group">
+                <label for="announcement-content">Content:</label>
+                <textarea id="announcement-content" rows="4" required></textarea>
+            </div>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">Add Announcement</button>
+                <button type="button" class="btn btn-secondary" onclick="closeAddAnnouncementModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Roadmap Modal -->
+<div id="add-roadmap-modal" class="modal">
+    <div class="modal-content large-modal">
+        <span class="close" onclick="closeAddRoadmapModal()">&times;</span>
+        <h2 id="roadmap-modal-title">Add Roadmap</h2>
+        <form id="add-roadmap-form">
+            <div class="form-group">
+                <label for="roadmap-id">Roadmap ID:</label>
+                <input type="text" id="roadmap-id" placeholder="e.g., webdev, python" required>
+            </div>
+            <div class="form-group">
+                <label for="roadmap-title-input">Title:</label>
+                <input type="text" id="roadmap-title-input" required>
+            </div>
+            <div class="form-group">
+                <label for="roadmap-icon">Icon (FontAwesome class):</label>
+                <input type="text" id="roadmap-icon" placeholder="e.g., fas fa-globe" required>
+            </div>
+            <div class="form-group">
+                <label for="roadmap-description">Description:</label>
+                <textarea id="roadmap-description" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Steps:</label>
+                <div id="roadmap-steps-list"></div>
+                <button type="button" class="btn btn-secondary" onclick="addStepInput()">
+                    <i class="fas fa-plus"></i> Add Step
+                </button>
+            </div>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary" id="roadmap-submit-btn">Add Roadmap</button>
+                <button type="button" class="btn btn-secondary" onclick="closeAddRoadmapModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

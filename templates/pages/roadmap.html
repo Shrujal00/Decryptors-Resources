@@ -1,0 +1,57 @@
+<!-- Roadmap Page -->
+<section id="roadmap" class="page">
+    <div class="container">
+        <div class="page-header">
+            <h1 id="roadmap-title">Roadmap</h1>
+            <div class="search-container">
+                <input type="text" id="resource-search" placeholder="Search resources...">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="free">Free</button>
+                    <button class="filter-btn" data-filter="paid">Paid</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="roadmap-content">
+            <div class="timeline" id="roadmap-timeline">
+                <!-- Timeline steps will be populated by JavaScript -->
+            </div>
+
+            <div class="resources-section">
+                <h2>Resources</h2>
+                <div class="admin-controls" id="admin-controls" style="display: none;">
+                    <button class="btn btn-primary" onclick="openAddResourceModal()">
+                        <i class="fas fa-plus"></i> Add Resource
+                    </button>
+                </div>
+
+                <div class="resources-container">
+                    <div class="resource-category">
+                        <div class="category-header" onclick="toggleCategory('free-resources')">
+                            <h3><i class="fas fa-gift"></i> Free Resources</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="category-content" id="free-resources">
+                            <div class="resources-list" id="free-resources-list">
+                                <!-- Free resources will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resource-category">
+                        <div class="category-header" onclick="toggleCategory('paid-resources')">
+                            <h3><i class="fas fa-star"></i> Paid Resources</h3>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="category-content" id="paid-resources">
+                            <div class="resources-list" id="paid-resources-list">
+                                <!-- Paid resources will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

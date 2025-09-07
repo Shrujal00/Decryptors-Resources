@@ -8,89 +8,89 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo" onclick="showPage('home')" style="cursor: pointer;">
-                <i class="fas fa-code"></i>
-                <span>Decryptors</span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#" data-page="home" class="nav-link active">Home</a></li>
-                <li class="dropdown">
-                    <a href="#" class="nav-link">Roadmaps <i class="fas fa-chevron-down"></i></a>
-                    <div class="dropdown-content">
-                        <a href="#" data-page="roadmap" data-field="fullstack">Full Stack Development</a>
-                        <a href="#" data-page="roadmap" data-field="app">App Development</a>
-                        <a href="#" data-page="roadmap" data-field="dsa">DSA</a>
-                        <a href="#" data-page="roadmap" data-field="cybersecurity">Cybersecurity</a>
-                        <a href="#" data-page="roadmap" data-field="network">Network Engineering</a>
-                        <a href="#" data-page="roadmap" data-field="cloud">Cloud Engineering</a>
-                        <a href="#" data-page="roadmap" data-field="datascience">Data Science</a>
-                        <a href="#" data-page="roadmap" data-field="ml">Machine Learning</a>
-                        <a href="#" data-page="roadmap" data-field="ai">Artificial Intelligence</a>
-                    </div>
-                </li>
-                <li><a href="#" data-page="community" class="nav-link">Community</a></li>
-                <li><a href="#" data-page="admin" class="nav-link">Admin</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
+    <!-- Navigation will be loaded here -->
+    <div id="navbar-content"></div>
 
-    <!-- Main Content -->
+    <!-- Main Content will be loaded here -->
     <main class="main-content">
-        <!-- Home Page -->
-        <section id="home" class="page active">
-            <div class="hero">
-                <div class="hero-content">
-                    <h1>Welcome to <span class="accent">Decryptors ADIT Coding Club</span></h1>
-                    <p>Your journey to becoming a skilled programmer starts here. We provide structured roadmaps, curated resources, and a supportive community to help you master any field in programming.</p>
-                    <div class="hero-buttons">
-                        <button class="btn btn-primary" onclick="scrollToRoadmaps()">Start Learning</button>
-                        <button class="btn btn-secondary" onclick="showPage('community')">Join Community</button>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <i class="fas fa-laptop-code"></i>
-                </div>
-            </div>
+        <!-- Pages will be loaded dynamically -->
+    </main>
 
-            <div class="features">
-                <div class="container">
-                    <h2>Why Join Decryptors?</h2>
-                    <div class="features-grid">
-                        <div class="feature-card">
-                            <i class="fas fa-route"></i>
-                            <h3>Structured Roadmaps</h3>
-                            <p>Clear, step-by-step learning paths for every field in programming</p>
-                        </div>
-                        <div class="feature-card">
-                            <i class="fas fa-book-open"></i>
-                            <h3>Curated Resources</h3>
-                            <p>Hand-picked free and paid resources to accelerate your learning</p>
-                        </div>
-                        <div class="feature-card">
-                            <i class="fas fa-users"></i>
-                            <h3>Supportive Community</h3>
-                            <p>Connect with fellow learners and experienced mentors</p>
-                        </div>
-                        <div class="feature-card">
-                            <i class="fas fa-search"></i>
-                            <h3>Easy Navigation</h3>
-                            <p>Find exactly what you need with our powerful search and filter tools</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Modals will be loaded here -->
+    <div id="modals-content"></div>
 
-            <div class="roadmaps-preview" id="roadmaps-section">
-                <div class="container">
-                    <h2>Explore Our Roadmaps</h2>
+    <!-- Scripts - Load in correct order -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Core modules first -->
+    <script src="js/config/firebase-config.js"></script>
+    <script src="js/data/defaultData.js"></script>
+    <script src="js/core/state.js"></script>
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/templateLoader.js"></script>
+    
+    <!-- Components -->
+    <script src="js/components/admin.js"></script>
+    <script src="js/components/modals.js"></script>
+    <script src="js/components/roadmaps.js"></script>
+    <script src="js/components/events.js"></script>
+    <script src="js/components/resources.js"></script>
+    
+    <!-- CRUD operations -->
+    <script src="js/crud/roadmaps.js"></script>
+    <script src="js/crud/events.js"></script>
+    <script src="js/crud/resources.js"></script>
+    <script src="js/crud/announcements.js"></script>
+    
+    <!-- Firebase and event handling -->
+    <script src="js/core/firebase.js"></script>
+    <script src="js/core/events.js"></script>
+    
+    <!-- Main app -->
+    <script src="js/main.js"></script>
+
+    <script>
+        // Initialize templates and app
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('DOM loaded, loading templates...');
+            
+            // Load all templates first
+            const templatesLoaded = await initializeTemplates();
+            
+            if (templatesLoaded) {
+                // Wait a bit for templates to render
+                setTimeout(() => {
+                    // Now initialize the app as before
+                    checkFirebaseConnection();
+                    initializeApp();
+                    setupEventListeners();
+                    
+                    if (window.isFirebaseEnabled) {
+                        initializeFirebaseListeners();
+                        seedDefaultData();
+                    } else {
+                        loadLocalData();
+                    }
+                    
+                    // Initialize collapsible categories
+                    setTimeout(() => {
+                        const categories = document.querySelectorAll('.category-content');
+                        categories.forEach(category => {
+                            category.classList.add('active');
+                            const header = category.previousElementSibling;
+                            const icon = header.querySelector('i:last-child');
+                            if (icon) icon.style.transform = 'rotate(180deg)';
+                        });
+                    }, 100);
+                }, 200);
+            } else {
+                console.error('Failed to load templates');
+            }
+        });
+    </script>
+</body>
+</html>
                     <div class="roadmaps-grid" id="roadmaps-grid">
                         <!-- Roadmaps will be populated by JavaScript -->
                     </div>
@@ -169,11 +169,7 @@
                             </button>
                         </div>
                         <div id="announcements-list">
-                            <div class="announcement-card">
-                                <div class="announcement-date">Dec 15, 2024</div>
-                                <h3>Welcome to Decryptors!</h3>
-                                <p>We're excited to launch our new platform. Start exploring the roadmaps and join our growing community of learners.</p>
-                            </div>
+                            <!-- Announcements will be populated by JavaScript -->
                         </div>
                     </div>
 
@@ -222,6 +218,7 @@
         </section>
     </main>
 
+    <!-- Include modals inline since template loading is causing issues -->
     <!-- Add Resource Modal -->
     <div id="add-resource-modal" class="modal">
         <div class="modal-content">
@@ -344,9 +341,34 @@
         </div>
     </div>
 
+    <!-- Scripts - Load in correct order -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
-    <script src="script.js"></script>
+    
+    <!-- Core modules first -->
+    <script src="js/config/firebase-config.js"></script>
+    <script src="js/data/defaultData.js"></script>
+    <script src="js/core/state.js"></script>
+    <script src="js/utils/storage.js"></script>
+    
+    <!-- Components -->
+    <script src="js/components/admin.js"></script>
+    <script src="js/components/modals.js"></script>
+    <script src="js/components/roadmaps.js"></script>
+    <script src="js/components/events.js"></script>
+    <script src="js/components/resources.js"></script>
+    
+    <!-- CRUD operations -->
+    <script src="js/crud/roadmaps.js"></script>
+    <script src="js/crud/events.js"></script>
+    <script src="js/crud/resources.js"></script>
+    <script src="js/crud/announcements.js"></script>
+    
+    <!-- Firebase and event handling -->
+    <script src="js/core/firebase.js"></script>
+    <script src="js/core/events.js"></script>
+    
+    <!-- Main app -->
+    <script src="js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,79 @@
+<!-- Admin Page -->
+<section id="admin" class="page">
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <div id="admin-login" class="admin-login">
+            <div class="login-form">
+                <h2>Admin Login</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+            <h2>Welcome, Admin!</h2>
+            <p>You are now in editing mode. You can add, edit, or remove content across the platform.</p>
+            
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <h3>Roadmaps</h3>
+                    <p id="roadmaps-count">9</p>
+                    <small>Total learning paths</small>
+                </div>
+                <div class="stat-card">
+                    <h3>Resources</h3>
+                    <p id="resources-count">0</p>
+                    <small>Learning resources</small>
+                </div>
+                <div class="stat-card">
+                    <h3>Events</h3>
+                    <p id="events-count">0</p>
+                    <small>Community events</small>
+                </div>
+                <div class="stat-card">
+                    <h3>Announcements</h3>
+                    <p id="announcements-count">0</p>
+                    <small>Recent updates</small>
+                </div>
+            </div>
+
+            <div class="admin-actions">
+                <div class="action-group">
+                    <h3>Quick Actions</h3>
+                    <button class="btn btn-primary" onclick="openAddRoadmapModal()">
+                        <i class="fas fa-plus"></i> Add Roadmap
+                    </button>
+                    <button class="btn btn-primary" onclick="openAddEventModal()">
+                        <i class="fas fa-plus"></i> Add Event
+                    </button>
+                    <button class="btn btn-primary" onclick="openAddAnnouncementModal()">
+                        <i class="fas fa-plus"></i> Add Announcement
+                    </button>
+                </div>
+                
+                <div class="action-group">
+                    <h3>Data Management</h3>
+                    <button class="btn btn-secondary" onclick="exportData()">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                    <button class="btn btn-warning" onclick="clearLocalData()">
+                        <i class="fas fa-trash"></i> Clear Local Data
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+</section>
