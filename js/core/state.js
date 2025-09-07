@@ -23,3 +23,14 @@ function checkFirebaseConnection() {
         console.log('Firebase error, using local storage:', error);
     }
 }
+
+// Initialize admin state from auth manager
+function initializeAdminState() {
+    // Check if authManager is available, otherwise fall back to localStorage
+    if (window.authManager) {
+        isAdmin = window.authManager.isAuthenticated();
+    } else {
+        isAdmin = localStorage.getItem('isAdmin') === 'true';
+    }
+    console.log('Admin state initialized:', isAdmin);
+}

@@ -5,24 +5,25 @@ function handleLogin(e) {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     
-    if (username === 'admin' && password === 'decryptors2025') {
-        isAdmin = true;
-        localStorage.setItem('isAdmin', 'true');
-        
+    if (window.authManager && window.authManager.login(username, password)) {
         document.getElementById('admin-login').style.display = 'none';
         document.getElementById('admin-dashboard').style.display = 'block';
         
         updateAdminUI();
         generateRoadmapCards();
+        updateAdminStats();
         alert('Login successful! You can now edit resources.');
     } else {
         alert('Invalid credentials. Please try again.');
+        // Clear password field for security
+        document.getElementById('password').value = '';
     }
 }
 
 function logout() {
-    isAdmin = false;
-    localStorage.removeItem('isAdmin');
+    if (window.authManager) {
+        window.authManager.logout();
+    }
     
     document.getElementById('admin-login').style.display = 'block';
     document.getElementById('admin-dashboard').style.display = 'none';
@@ -31,6 +32,8 @@ function logout() {
     
     updateAdminUI();
     generateRoadmapCards();
+    
+    alert('You have been logged out successfully.');
 }
 
 function updateAdminUI() {
@@ -38,14 +41,43 @@ function updateAdminUI() {
     const eventAdminControls = document.getElementById('event-admin-controls');
     const announcementAdminControls = document.getElementById('announcement-admin-controls');
     
-    if (isAdmin) {
+    // Check authentication status - fallback to localStorage if authManager not available
+    const isAuthenticated = window.authManager ? window.authManager.isAuthenticated() : (localStorage.getItem('isAdmin') === 'true');
+    
+    if (isAuthenticated) {
         if (adminControls) adminControls.style.display = 'block';
         if (eventAdminControls) eventAdminControls.style.display = 'block';
         if (announcementAdminControls) announcementAdminControls.style.display = 'block';
+        
+        // Update admin stats if on admin page
+        updateAdminStats();
+        
+        // Show session info if on admin page
+        showSessionInfo();
     } else {
         if (adminControls) adminControls.style.display = 'none';
         if (eventAdminControls) eventAdminControls.style.display = 'none';
         if (announcementAdminControls) announcementAdminControls.style.display = 'none';
+        
+        // Ensure admin state is properly reset
+        isAdmin = false;
+    }
+}
+
+function showSessionInfo() {
+    if (!window.authManager) return;
+    
+    const sessionInfo = window.authManager.getSessionInfo();
+    if (sessionInfo) {
+        const sessionInfoEl = document.getElementById('session-info');
+        if (sessionInfoEl) {
+            sessionInfoEl.innerHTML = `
+                <small>
+                    Session: ${sessionInfo.timeRemaining} minutes remaining
+                    <br>Logged in: ${sessionInfo.sessionAge} minutes ago
+                </small>
+            `;
+        }
     }
 }
 
@@ -76,7 +108,28 @@ function updateAdminStats() {
     if (announcementsCountEl) announcementsCountEl.textContent = allAnnouncements.length;
 }
 
+// Admin action middleware - check authentication before performing admin actions
+function requireAuth(action) {
+    return function(...args) {
+        if (!authManager.isAuthenticated()) {
+            alert('Your session has expired. Please log in again.');
+            authManager.forceLogout();
+            return false;
+        }
+        return action.apply(this, args);
+    };
+}
+
+// Wrap admin functions with authentication middleware
+const authenticatedExportData = requireAuth(exportData);
+const authenticatedClearLocalData = requireAuth(clearLocalData);
+
 function exportData() {
+    if (window.authManager && !window.authManager.isAuthenticated()) {
+        alert('Authentication required for this action.');
+        return;
+    }
+    
     const data = {
         roadmaps: allRoadmaps,
         resources: allResources,
@@ -97,6 +150,11 @@ function exportData() {
 }
 
 function clearLocalData() {
+    if (window.authManager && !window.authManager.isAuthenticated()) {
+        alert('Authentication required for this action.');
+        return;
+    }
+    
     if (!confirm('Are you sure you want to clear all local data? This action cannot be undone.')) {
         return;
     }

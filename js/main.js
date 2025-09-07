@@ -1,6 +1,7 @@
 // Main application initialization and core functions
 function initializeApp() {
-    isAdmin = localStorage.getItem('isAdmin') === 'true';
+    // Initialize admin state using auth manager instead of localStorage
+    initializeAdminState();
     updateAdminUI();
     generateRoadmapCards();
     showPage('home');
@@ -35,25 +36,6 @@ function showPage(page, field = '') {
     }
 }
 
-function updateAdminUI() {
-    const adminControls = document.getElementById('admin-controls');
-    const eventAdminControls = document.getElementById('event-admin-controls');
-    const announcementAdminControls = document.getElementById('announcement-admin-controls');
-    
-    if (isAdmin) {
-        if (adminControls) adminControls.style.display = 'block';
-        if (eventAdminControls) eventAdminControls.style.display = 'block';
-        if (announcementAdminControls) announcementAdminControls.style.display = 'block';
-        
-        // Update admin stats if on admin page
-        updateAdminStats();
-    } else {
-        if (adminControls) adminControls.style.display = 'none';
-        if (eventAdminControls) eventAdminControls.style.display = 'none';
-        if (announcementAdminControls) announcementAdminControls.style.display = 'none';
-    }
-}
-
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing app...');
@@ -80,8 +62,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (icon) icon.style.transform = 'rotate(180deg)';
             });
         }, 100);
-    }, 1500);
+    }, 500); // Reduced timeout
 });
+
+function updateAdminUI() {
+    const adminControls = document.getElementById('admin-controls');
+    const eventAdminControls = document.getElementById('event-admin-controls');
+    const announcementAdminControls = document.getElementById('announcement-admin-controls');
+    
+    // Use auth manager if available, otherwise fall back to localStorage
+    const isAuthenticated = window.authManager ? window.authManager.isAuthenticated() : (localStorage.getItem('isAdmin') === 'true');
+    isAdmin = isAuthenticated; // Keep global state in sync
+    
+    if (isAuthenticated) {
+        if (adminControls) adminControls.style.display = 'block';
+        if (eventAdminControls) eventAdminControls.style.display = 'block';
+        if (announcementAdminControls) announcementAdminControls.style.display = 'block';
+        
+        // Update admin stats if on admin page
+        if (typeof updateAdminStats === 'function') {
+            updateAdminStats();
+        }
+    } else {
+        if (adminControls) adminControls.style.display = 'none';
+        if (eventAdminControls) eventAdminControls.style.display = 'none';
+        if (announcementAdminControls) announcementAdminControls.style.display = 'none';
+    }
+}
 
 // Clean up listeners
 window.addEventListener('beforeunload', () => {
