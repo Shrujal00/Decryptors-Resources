@@ -5,7 +5,9 @@ let isAdmin = false;
 let allResources = [];
 let allEvents = [];
 let allAnnouncements = [];
+let allRoadmaps = {};
 let editingEventId = null;
+let editingRoadmapId = null;
 
 // Sample roadmap data
 const roadmapData = {
@@ -140,26 +142,6 @@ const defaultResources = {
             { id: '4', title: 'Complete Web Developer Bootcamp', url: 'https://udemy.com', description: 'Comprehensive paid course on Udemy' },
             { id: '5', title: 'Frontend Masters', url: 'https://frontendmasters.com', description: 'Advanced frontend development courses' }
         ]
-    },
-    app: {
-        free: [
-            { id: '6', title: 'React Native Docs', url: 'https://reactnative.dev', description: 'Official React Native documentation' },
-            { id: '7', title: 'Flutter Documentation', url: 'https://flutter.dev', description: 'Official Flutter development guide' }
-        ],
-        paid: [
-            { id: '8', title: 'iOS Development Course', url: 'https://udemy.com', description: 'Complete iOS development with Swift' },
-            { id: '9', title: 'Android Development Nanodegree', url: 'https://udacity.com', description: 'Google-certified Android course' }
-        ]
-    },
-    dsa: {
-        free: [
-            { id: '10', title: 'LeetCode', url: 'https://leetcode.com', description: 'Practice coding problems and algorithms' },
-            { id: '11', title: 'GeeksforGeeks', url: 'https://geeksforgeeks.org', description: 'DSA tutorials and practice problems' }
-        ],
-        paid: [
-            { id: '12', title: 'AlgoExpert', url: 'https://algoexpert.io', description: 'Curated coding interview preparation' },
-            { id: '13', title: 'InterviewBit', url: 'https://interviewbit.com', description: 'Structured interview preparation platform' }
-        ]
     }
 };
 
@@ -222,15 +204,26 @@ function loadLocalData() {
     
     displayEvents();
     displayAnnouncements();
+    generateRoadmapCards();
     console.log('Local data loaded');
 }
 
 async function seedDefaultData() {
     try {
-        // Check if we need to upload local data to Firebase first
         await uploadLocalDataToFirebase();
         
-        // Then seed default data if collections are empty
+        // Seed roadmaps to Firebase
+        const roadmapsSnapshot = await roadmapsCollection.get();
+        if (roadmapsSnapshot.empty) {
+            console.log('Seeding default roadmaps...');
+            for (const [key, roadmap] of Object.entries(roadmapData)) {
+                await roadmapsCollection.doc(key).set({
+                    ...roadmap,
+                    createdAt: new Date().toISOString()
+                });
+            }
+        }
+        
         const resourcesSnapshot = await resourcesCollection.get();
         if (resourcesSnapshot.empty) {
             console.log('Seeding default resources...');
@@ -260,12 +253,10 @@ async function seedDefaultData() {
     }
 }
 
-// Add function to upload existing local data to Firebase
 async function uploadLocalDataToFirebase() {
     try {
         console.log('Checking for existing local data to upload...');
         
-        // Upload local resources to Firebase
         const localResources = JSON.parse(localStorage.getItem('roadmapResources'));
         if (localResources && Object.keys(localResources).length > 0) {
             console.log('Uploading local resources to Firebase...');
@@ -278,34 +269,31 @@ async function uploadLocalDataToFirebase() {
             }
         }
         
-        // Upload local events to Firebase
         const localEvents = JSON.parse(localStorage.getItem('communityEvents'));
         if (localEvents && localEvents.length > 0) {
             console.log('Uploading local events to Firebase...');
             const eventsSnapshot = await eventsCollection.get();
             if (eventsSnapshot.empty) {
                 for (const event of localEvents) {
-                    const { id, ...eventData } = event; // Remove local id
+                    const { id, ...eventData } = event;
                     await eventsCollection.add(eventData);
                 }
                 console.log('Uploaded local events to Firebase');
             }
         }
         
-        // Upload local announcements to Firebase
         const localAnnouncements = JSON.parse(localStorage.getItem('communityAnnouncements'));
         if (localAnnouncements && localAnnouncements.length > 0) {
             console.log('Uploading local announcements to Firebase...');
             const announcementsSnapshot = await announcementsCollection.get();
             if (announcementsSnapshot.empty) {
                 for (const announcement of localAnnouncements) {
-                    const { id, ...announcementData } = announcement; // Remove local id
+                    const { id, ...announcementData } = announcement;
                     await announcementsCollection.add(announcementData);
                 }
                 console.log('Uploaded local announcements to Firebase');
             }
         }
-        
     } catch (error) {
         console.error('Error uploading local data to Firebase:', error);
     }
@@ -315,35 +303,43 @@ function initializeFirebaseListeners() {
     if (!window.isFirebaseEnabled) return;
 
     try {
-        // Listen for events with proper error handling
+        // Listen for roadmaps changes
+        roadmapsListener = roadmapsCollection.onSnapshot((snapshot) => {
+            allRoadmaps = {};
+            snapshot.forEach((doc) => {
+                allRoadmaps[doc.id] = doc.data();
+            });
+            generateRoadmapCards();
+            console.log('Roadmaps synced from Firebase:', Object.keys(allRoadmaps).length);
+        }, (error) => {
+            console.error('Roadmaps listener error:', error);
+            generateRoadmapCards(); // Use static data on error
+        });
+
         eventsListener = eventsCollection.onSnapshot((snapshot) => {
-            console.log('Events snapshot received, size:', snapshot.size);
             allEvents = [];
             snapshot.forEach((doc) => {
                 allEvents.push({ id: doc.id, ...doc.data() });
             });
             displayEvents();
-            console.log('Events synced from Firebase:', allEvents.length);
+            console.log('Events synced from Firebase');
         }, (error) => {
             console.error('Events listener error:', error);
             loadLocalData();
         });
 
-        // Listen for announcements with proper error handling
         announcementsListener = announcementsCollection.onSnapshot((snapshot) => {
-            console.log('Announcements snapshot received, size:', snapshot.size);
             allAnnouncements = [];
             snapshot.forEach((doc) => {
                 allAnnouncements.push({ id: doc.id, ...doc.data() });
             });
             displayAnnouncements();
-            console.log('Announcements synced from Firebase:', allAnnouncements.length);
+            console.log('Announcements synced from Firebase');
         }, (error) => {
             console.error('Announcements listener error:', error);
             loadLocalData();
         });
 
-        // Listen for resources with proper error handling
         resourcesListener = resourcesCollection.onSnapshot((snapshot) => {
             allResources = {};
             snapshot.forEach((doc) => {
@@ -372,24 +368,25 @@ function initializeApp() {
 }
 
 function setupEventListeners() {
-    // Navigation links
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
+    console.log('Setting up event listeners...');
+    
+    // Navigation using event delegation
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.nav-link')) {
             e.preventDefault();
+            const link = e.target.closest('.nav-link');
             const page = link.getAttribute('data-page');
             const field = link.getAttribute('data-field');
             showPage(page, field);
-        });
-    });
-
-    // Dropdown links
-    document.querySelectorAll('.dropdown-content a').forEach(link => {
-        link.addEventListener('click', (e) => {
+        }
+        
+        if (e.target.closest('.dropdown-content a')) {
             e.preventDefault();
+            const link = e.target.closest('.dropdown-content a');
             const page = link.getAttribute('data-page');
             const field = link.getAttribute('data-field');
             showPage(page, field);
-        });
+        }
     });
 
     // Hamburger menu
@@ -402,16 +399,6 @@ function setupEventListeners() {
             navMenu.classList.toggle('active');
         });
     }
-
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            if (hamburger && navMenu) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-            }
-        });
-    });
 
     // Forms
     const loginForm = document.getElementById('login-form');
@@ -426,6 +413,9 @@ function setupEventListeners() {
     const addAnnouncementForm = document.getElementById('add-announcement-form');
     if (addAnnouncementForm) addAnnouncementForm.addEventListener('submit', handleAddAnnouncement);
 
+    const addRoadmapForm = document.getElementById('add-roadmap-form');
+    if (addRoadmapForm) addRoadmapForm.addEventListener('submit', handleAddRoadmap);
+
     // Search and filter
     const resourceSearch = document.getElementById('resource-search');
     if (resourceSearch) resourceSearch.addEventListener('input', filterResources);
@@ -438,30 +428,15 @@ function setupEventListeners() {
         });
     });
 
-    // Modal close events
-    window.addEventListener('click', (e) => {
-        const resourceModal = document.getElementById('add-resource-modal');
-        const eventModal = document.getElementById('add-event-modal');
-        const announcementModal = document.getElementById('add-announcement-modal');
-        
-        if (e.target === resourceModal) closeAddResourceModal();
-        if (e.target === eventModal) closeAddEventModal();
-        if (e.target === announcementModal) closeAddAnnouncementModal();
-    });
-
     console.log('Event listeners set up complete');
 }
 
 function showPage(page, field = '') {
     console.log('Showing page:', page, field);
     
-    // Hide all pages
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    
-    // Update navigation
     document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
     
-    // Show requested page
     const pageElement = document.getElementById(page);
     if (pageElement) {
         pageElement.classList.add('active');
@@ -473,10 +448,11 @@ function showPage(page, field = '') {
         } else if (page === 'community') {
             displayEvents();
             displayAnnouncements();
+        } else if (page === 'home') {
+            generateRoadmapCards();
         }
     }
 
-    // Update active nav link
     const activeLink = document.querySelector(`[data-page="${page}"]`);
     if (activeLink && !activeLink.getAttribute('data-field')) {
         activeLink.classList.add('active');
@@ -489,7 +465,10 @@ function generateRoadmapCards() {
 
     grid.innerHTML = '';
     
-    Object.entries(roadmapData).forEach(([key, roadmap]) => {
+    // Use Firebase roadmaps if available, otherwise use static data
+    const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
+    
+    Object.entries(roadmapsToUse).forEach(([key, roadmap]) => {
         const card = document.createElement('div');
         card.className = 'roadmap-card';
         card.onclick = () => showPage('roadmap', key);
@@ -498,14 +477,44 @@ function generateRoadmapCards() {
             <i class="${roadmap.icon}"></i>
             <h3>${roadmap.title}</h3>
             <p>${roadmap.description}</p>
+            ${isAdmin ? `
+            <div class="roadmap-actions">
+                <button class="action-btn edit" onclick="event.stopPropagation(); editRoadmap('${key}')" title="Edit">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete" onclick="event.stopPropagation(); deleteRoadmap('${key}')" title="Delete">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            ` : ''}
         `;
         
         grid.appendChild(card);
     });
+    
+    // Add "Add Roadmap" card for admin
+    if (isAdmin) {
+        const addCard = document.createElement('div');
+        addCard.className = 'roadmap-card add-roadmap-card';
+        addCard.onclick = () => openAddRoadmapModal();
+        
+        addCard.innerHTML = `
+            <i class="fas fa-plus"></i>
+            <h3>Add New Roadmap</h3>
+            <p>Create a new learning path</p>
+        `;
+        
+        grid.appendChild(addCard);
+    }
+    
+    console.log('Roadmap cards generated:', Object.keys(roadmapsToUse).length);
 }
 
 function loadRoadmap(field) {
-    const roadmap = roadmapData[field];
+    // Use Firebase roadmaps if available, otherwise use static data
+    const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
+    const roadmap = roadmapsToUse[field];
+    
     if (!roadmap) return;
 
     document.getElementById('roadmap-title').textContent = roadmap.title;
@@ -522,11 +531,36 @@ function loadRoadmap(field) {
             <div class="timeline-content">
                 <h3>${step.title}</h3>
                 <p>${step.description}</p>
+                ${isAdmin ? `
+                <div class="step-actions">
+                    <button class="action-btn edit" onclick="editStep('${field}', ${index})" title="Edit Step">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn delete" onclick="deleteStep('${field}', ${index})" title="Delete Step">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                ` : ''}
             </div>
         `;
         
         timeline.appendChild(timelineItem);
     });
+
+    // Add "Add Step" button for admin
+    if (isAdmin) {
+        const addStepItem = document.createElement('div');
+        addStepItem.className = 'timeline-item add-step-item';
+        addStepItem.innerHTML = `
+            <div class="timeline-marker">+</div>
+            <div class="timeline-content">
+                <button class="btn btn-secondary" onclick="addStep('${field}')">
+                    <i class="fas fa-plus"></i> Add Step
+                </button>
+            </div>
+        `;
+        timeline.appendChild(addStepItem);
+    }
 
     loadFieldResources(field);
 }
@@ -687,6 +721,7 @@ function handleLogin(e) {
         document.getElementById('admin-dashboard').style.display = 'block';
         
         updateAdminUI();
+        generateRoadmapCards();
         alert('Login successful! You can now edit resources.');
     } else {
         alert('Invalid credentials. Please try again.');
@@ -703,120 +738,16 @@ function logout() {
     document.getElementById('password').value = '';
     
     updateAdminUI();
+    generateRoadmapCards();
 }
 
-function editEvent(eventId) {
-    if (!isAdmin) return;
-    
-    const event = allEvents.find(e => e.id === eventId);
-    if (!event) return;
-    
-    editingEventId = eventId;
-    document.getElementById('event-modal-title').textContent = 'Edit Event';
-    document.getElementById('event-submit-btn').textContent = 'Update Event';
-    
-    document.getElementById('event-title').value = event.title;
-    document.getElementById('event-description').value = event.description;
-    document.getElementById('event-date').value = event.date;
-    document.getElementById('event-time').value = event.time;
-    
-    document.getElementById('add-event-modal').style.display = 'block';
-}
-
-async function deleteEvent(eventId) {
-    if (!isAdmin || !confirm('Are you sure you want to delete this event?')) return;
-    
-    console.log('Attempting to delete event:', eventId);
-    
-    try {
-        if (window.isFirebaseEnabled && typeof eventsCollection !== 'undefined') {
-            console.log('Deleting event from Firebase...');
-            
-            // Delete from Firebase
-            await eventsCollection.doc(eventId).delete();
-            console.log('Event deleted from Firebase successfully');
-            
-            // Immediately update local array and UI
-            allEvents = allEvents.filter(e => e.id !== eventId);
-            displayEvents();
-            
-        } else {
-            console.log('Deleting event from local storage...');
-            allEvents = allEvents.filter(e => e.id !== eventId);
-            saveEvents();
-            displayEvents();
-        }
-        
-        console.log('Event deleted and UI updated');
-        
-    } catch (error) {
-        console.error('Error deleting event:', error);
-        alert('Error deleting event: ' + error.message);
-    }
-}
-
-// Force refresh function for admin
-async function refreshAllData() {
-    if (!window.isFirebaseEnabled) {
-        loadLocalData();
-        return;
-    }
-    
-    try {
-        console.log('Refreshing all data from Firebase...');
-        
-        // Refresh events
-        const eventsSnapshot = await eventsCollection.get();
-        allEvents = [];
-        eventsSnapshot.forEach((doc) => {
-            allEvents.push({ id: doc.id, ...doc.data() });
-        });
-        displayEvents();
-        
-        // Refresh announcements
-        const announcementsSnapshot = await announcementsCollection.get();
-        allAnnouncements = [];
-        announcementsSnapshot.forEach((doc) => {
-            allAnnouncements.push({ id: doc.id, ...doc.data() });
-        });
-        displayAnnouncements();
-        
-        console.log('Data refreshed successfully');
-        alert('Data refreshed from Firebase!');
-    } catch (error) {
-        console.error('Error refreshing data:', error);
-        alert('Error refreshing data: ' + error.message);
-    }
-}
-
-// Enhanced admin dashboard with refresh functionality
 function updateAdminUI() {
     const adminControls = document.getElementById('admin-controls');
     const eventAdminControls = document.getElementById('event-admin-controls');
     const announcementAdminControls = document.getElementById('announcement-admin-controls');
     
     if (isAdmin) {
-        if (adminControls) {
-            adminControls.style.display = 'block';
-            // Add refresh button if not exists
-            if (!document.getElementById('refresh-data-btn')) {
-                const refreshBtn = document.createElement('button');
-                refreshBtn.id = 'refresh-data-btn';
-                refreshBtn.className = 'btn btn-secondary';
-                refreshBtn.innerHTML = '<i class="fas fa-refresh"></i> Refresh Data';
-                refreshBtn.onclick = refreshAllData;
-                adminControls.appendChild(refreshBtn);
-            }
-            // Add sync button if not exists
-            if (!document.getElementById('sync-firebase-btn')) {
-                const syncBtn = document.createElement('button');
-                syncBtn.id = 'sync-firebase-btn';
-                syncBtn.className = 'btn btn-secondary';
-                syncBtn.innerHTML = '<i class="fas fa-sync"></i> Sync to Firebase';
-                syncBtn.onclick = syncAllDataToFirebase;
-                adminControls.appendChild(syncBtn);
-            }
-        }
+        if (adminControls) adminControls.style.display = 'block';
         if (eventAdminControls) eventAdminControls.style.display = 'block';
         if (announcementAdminControls) announcementAdminControls.style.display = 'block';
     } else {
@@ -881,6 +812,26 @@ function closeAddAnnouncementModal() {
     document.getElementById('add-announcement-form').reset();
 }
 
+function openAddRoadmapModal() {
+    if (!isAdmin) {
+        alert('Please login as admin to add roadmaps.');
+        return;
+    }
+    
+    editingRoadmapId = null;
+    document.getElementById('roadmap-modal-title').textContent = 'Add Roadmap';
+    document.getElementById('roadmap-submit-btn').textContent = 'Add Roadmap';
+    document.getElementById('add-roadmap-form').reset();
+    document.getElementById('roadmap-steps-list').innerHTML = '';
+    document.getElementById('add-roadmap-modal').style.display = 'block';
+}
+
+function closeAddRoadmapModal() {
+    document.getElementById('add-roadmap-modal').style.display = 'none';
+    document.getElementById('add-roadmap-form').reset();
+    editingRoadmapId = null;
+}
+
 // CRUD operations
 async function handleAddResource(e) {
     e.preventDefault();
@@ -902,7 +853,6 @@ async function handleAddResource(e) {
 
     try {
         if (window.isFirebaseEnabled && typeof resourcesCollection !== 'undefined') {
-            console.log('Adding resource to Firebase...');
             const fieldDoc = resourcesCollection.doc(currentField);
             const fieldData = await fieldDoc.get();
             
@@ -911,9 +861,7 @@ async function handleAddResource(e) {
             
             fieldResources[type].push(newResource);
             await fieldDoc.set(fieldResources);
-            console.log('Resource added to Firebase successfully');
         } else {
-            console.log('Adding resource to local storage...');
             if (!allResources[currentField]) allResources[currentField] = { free: [], paid: [] };
             allResources[currentField][type].push(newResource);
             saveResources();
@@ -933,7 +881,6 @@ async function deleteResource(resourceId, type) {
     
     try {
         if (window.isFirebaseEnabled && typeof resourcesCollection !== 'undefined') {
-            console.log('Deleting resource from Firebase...');
             const fieldDoc = resourcesCollection.doc(currentField);
             const fieldData = await fieldDoc.get();
             
@@ -942,11 +889,9 @@ async function deleteResource(resourceId, type) {
                 if (fieldResources[type]) {
                     fieldResources[type] = fieldResources[type].filter(r => r.id !== resourceId);
                     await fieldDoc.set(fieldResources);
-                    console.log('Resource deleted from Firebase successfully');
                 }
             }
         } else {
-            console.log('Deleting resource from local storage...');
             if (allResources[currentField] && allResources[currentField][type]) {
                 allResources[currentField][type] = allResources[currentField][type].filter(r => r.id !== resourceId);
                 saveResources();
@@ -979,19 +924,15 @@ async function handleAddEvent(e) {
 
     try {
         if (window.isFirebaseEnabled && typeof eventsCollection !== 'undefined') {
-            console.log('Adding event to Firebase...');
             if (editingEventId) {
                 await eventsCollection.doc(editingEventId).update({
                     ...eventData,
                     updatedAt: new Date().toISOString()
                 });
-                console.log('Event updated in Firebase successfully');
             } else {
                 await eventsCollection.add(eventData);
-                console.log('Event added to Firebase successfully');
             }
         } else {
-            console.log('Adding event to local storage...');
             if (editingEventId) {
                 const index = allEvents.findIndex(e => e.id === editingEventId);
                 if (index !== -1) allEvents[index] = { ...allEvents[index], ...eventData };
@@ -1013,33 +954,38 @@ async function handleAddEvent(e) {
 async function deleteEvent(eventId) {
     if (!isAdmin || !confirm('Are you sure you want to delete this event?')) return;
     
-    console.log('Attempting to delete event:', eventId);
-    
     try {
         if (window.isFirebaseEnabled && typeof eventsCollection !== 'undefined') {
-            console.log('Deleting event from Firebase...');
-            
-            // Delete from Firebase
             await eventsCollection.doc(eventId).delete();
-            console.log('Event deleted from Firebase successfully');
-            
-            // Immediately update local array and UI
             allEvents = allEvents.filter(e => e.id !== eventId);
             displayEvents();
-            
         } else {
-            console.log('Deleting event from local storage...');
             allEvents = allEvents.filter(e => e.id !== eventId);
             saveEvents();
             displayEvents();
         }
-        
-        console.log('Event deleted and UI updated');
-        
     } catch (error) {
         console.error('Error deleting event:', error);
         alert('Error deleting event: ' + error.message);
     }
+}
+
+function editEvent(eventId) {
+    if (!isAdmin) return;
+    
+    const event = allEvents.find(e => e.id === eventId);
+    if (!event) return;
+    
+    editingEventId = eventId;
+    document.getElementById('event-modal-title').textContent = 'Edit Event';
+    document.getElementById('event-submit-btn').textContent = 'Update Event';
+    
+    document.getElementById('event-title').value = event.title;
+    document.getElementById('event-description').value = event.description;
+    document.getElementById('event-date').value = event.date;
+    document.getElementById('event-time').value = event.time;
+    
+    document.getElementById('add-event-modal').style.display = 'block';
 }
 
 async function handleAddAnnouncement(e) {
@@ -1058,11 +1004,8 @@ async function handleAddAnnouncement(e) {
 
     try {
         if (window.isFirebaseEnabled && typeof announcementsCollection !== 'undefined') {
-            console.log('Adding announcement to Firebase...');
             await announcementsCollection.add(announcementData);
-            console.log('Announcement added to Firebase successfully');
         } else {
-            console.log('Adding announcement to local storage...');
             allAnnouncements.unshift({ id: Date.now().toString(), ...announcementData });
             saveAnnouncements();
             displayAnnouncements();
@@ -1081,11 +1024,8 @@ async function deleteAnnouncement(announcementId) {
     
     try {
         if (window.isFirebaseEnabled && typeof announcementsCollection !== 'undefined') {
-            console.log('Deleting announcement from Firebase...');
             await announcementsCollection.doc(announcementId).delete();
-            console.log('Announcement deleted from Firebase successfully');
         } else {
-            console.log('Deleting announcement from local storage...');
             allAnnouncements = allAnnouncements.filter(a => a.id !== announcementId);
             saveAnnouncements();
             displayAnnouncements();
@@ -1097,28 +1037,200 @@ async function deleteAnnouncement(announcementId) {
     }
 }
 
-// Add function to manually sync all data to Firebase (for admin use)
-async function syncAllDataToFirebase() {
-    if (!isAdmin) {
-        alert('Admin access required');
-        return;
-    }
+// Roadmap Management Functions
+async function handleAddRoadmap(e) {
+    e.preventDefault();
+    if (!isAdmin) return;
     
-    if (!window.isFirebaseEnabled) {
-        alert('Firebase not available');
-        return;
-    }
+    const id = document.getElementById('roadmap-id').value;
+    const title = document.getElementById('roadmap-title-input').value;
+    const icon = document.getElementById('roadmap-icon').value;
+    const description = document.getElementById('roadmap-description').value;
     
-    if (!confirm('This will upload all local data to Firebase. Continue?')) {
-        return;
+    // Get steps from the dynamic list
+    const steps = [];
+    const stepElements = document.querySelectorAll('.step-input-group');
+    stepElements.forEach(stepEl => {
+        const stepTitle = stepEl.querySelector('.step-title').value;
+        const stepDesc = stepEl.querySelector('.step-description').value;
+        if (stepTitle && stepDesc) {
+            steps.push({ title: stepTitle, description: stepDesc });
+        }
+    });
+
+    const roadmapDataObj = {
+        title,
+        icon,
+        description,
+        steps,
+        createdAt: new Date().toISOString()
+    };
+
+    try {
+        if (window.isFirebaseEnabled && typeof roadmapsCollection !== 'undefined') {
+            if (editingRoadmapId) {
+                await roadmapsCollection.doc(editingRoadmapId).update({
+                    ...roadmapDataObj,
+                    updatedAt: new Date().toISOString()
+                });
+                console.log('Roadmap updated in Firebase successfully');
+            } else {
+                await roadmapsCollection.doc(id).set(roadmapDataObj);
+                console.log('Roadmap added to Firebase successfully');
+            }
+        } else {
+            if (editingRoadmapId) {
+                allRoadmaps[editingRoadmapId] = roadmapDataObj;
+            } else {
+                allRoadmaps[id] = roadmapDataObj;
+            }
+            saveRoadmaps();
+            generateRoadmapCards();
+        }
+        
+        closeAddRoadmapModal();
+        alert('Roadmap saved successfully!');
+    } catch (error) {
+        console.error('Error saving roadmap:', error);
+        alert('Error saving roadmap: ' + error.message);
     }
+}
+
+function editRoadmap(roadmapId) {
+    if (!isAdmin) return;
+    
+    const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
+    const roadmap = roadmapsToUse[roadmapId];
+    if (!roadmap) return;
+    
+    editingRoadmapId = roadmapId;
+    document.getElementById('roadmap-modal-title').textContent = 'Edit Roadmap';
+    document.getElementById('roadmap-submit-btn').textContent = 'Update Roadmap';
+    
+    document.getElementById('roadmap-id').value = roadmapId;
+    document.getElementById('roadmap-title-input').value = roadmap.title;
+    document.getElementById('roadmap-icon').value = roadmap.icon;
+    document.getElementById('roadmap-description').value = roadmap.description;
+    
+    // Populate steps
+    const stepsList = document.getElementById('roadmap-steps-list');
+    stepsList.innerHTML = '';
+    roadmap.steps.forEach((step, index) => {
+        addStepInput(step.title, step.description);
+    });
+    
+    document.getElementById('add-roadmap-modal').style.display = 'block';
+}
+
+async function deleteRoadmap(roadmapId) {
+    if (!isAdmin || !confirm('Are you sure you want to delete this roadmap?')) return;
     
     try {
-        await uploadLocalDataToFirebase();
-        alert('All data synced to Firebase successfully!');
+        if (window.isFirebaseEnabled && typeof roadmapsCollection !== 'undefined') {
+            await roadmapsCollection.doc(roadmapId).delete();
+            console.log('Roadmap deleted from Firebase successfully');
+        } else {
+            delete allRoadmaps[roadmapId];
+            saveRoadmaps();
+            generateRoadmapCards();
+        }
+        alert('Roadmap deleted successfully!');
     } catch (error) {
-        console.error('Error syncing data:', error);
-        alert('Error syncing data: ' + error.message);
+        console.error('Error deleting roadmap:', error);
+        alert('Error deleting roadmap: ' + error.message);
+    }
+}
+
+function addStepInput(title = '', description = '') {
+    const stepsList = document.getElementById('roadmap-steps-list');
+    const stepDiv = document.createElement('div');
+    stepDiv.className = 'step-input-group';
+    
+    stepDiv.innerHTML = `
+        <div class="form-group">
+            <label>Step Title:</label>
+            <input type="text" class="step-title" value="${title}" required>
+        </div>
+        <div class="form-group">
+            <label>Step Description:</label>
+            <textarea class="step-description" rows="2" required>${description}</textarea>
+        </div>
+        <button type="button" class="btn btn-danger remove-step" onclick="removeStepInput(this)">
+            <i class="fas fa-trash"></i> Remove Step
+        </button>
+        <hr>
+    `;
+    
+    stepsList.appendChild(stepDiv);
+}
+
+function removeStepInput(button) {
+    button.parentElement.remove();
+}
+
+// Step Management Functions
+function addStep(roadmapId) {
+    const title = prompt('Enter step title:');
+    const description = prompt('Enter step description:');
+    
+    if (title && description) {
+        updateRoadmapSteps(roadmapId, 'add', { title, description });
+    }
+}
+
+function editStep(roadmapId, stepIndex) {
+    const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
+    const roadmap = roadmapsToUse[roadmapId];
+    const step = roadmap.steps[stepIndex];
+    
+    const title = prompt('Edit step title:', step.title);
+    const description = prompt('Edit step description:', step.description);
+    
+    if (title && description) {
+        updateRoadmapSteps(roadmapId, 'edit', { title, description }, stepIndex);
+    }
+}
+
+function deleteStep(roadmapId, stepIndex) {
+    if (confirm('Are you sure you want to delete this step?')) {
+        updateRoadmapSteps(roadmapId, 'delete', null, stepIndex);
+    }
+}
+
+async function updateRoadmapSteps(roadmapId, action, stepData, stepIndex) {
+    try {
+        const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
+        const roadmap = { ...roadmapsToUse[roadmapId] };
+        
+        switch (action) {
+            case 'add':
+                roadmap.steps.push(stepData);
+                break;
+            case 'edit':
+                roadmap.steps[stepIndex] = stepData;
+                break;
+            case 'delete':
+                roadmap.steps.splice(stepIndex, 1);
+                break;
+        }
+        
+        roadmap.updatedAt = new Date().toISOString();
+        
+        if (window.isFirebaseEnabled && typeof roadmapsCollection !== 'undefined') {
+            await roadmapsCollection.doc(roadmapId).update(roadmap);
+            console.log('Roadmap steps updated in Firebase');
+        } else {
+            allRoadmaps[roadmapId] = roadmap;
+            saveRoadmaps();
+            if (currentField === roadmapId) {
+                loadRoadmap(roadmapId);
+            }
+        }
+        
+        alert('Step updated successfully!');
+    } catch (error) {
+        console.error('Error updating step:', error);
+        alert('Error updating step: ' + error.message);
     }
 }
 
@@ -1161,6 +1273,16 @@ function filterResources() {
     });
 }
 
+function scrollToRoadmaps() {
+    const roadmapsSection = document.getElementById('roadmaps-section');
+    if (roadmapsSection) {
+        roadmapsSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+}
+
 // Local storage functions
 function saveResources() {
     localStorage.setItem('roadmapResources', JSON.stringify(allResources));
@@ -1174,9 +1296,14 @@ function saveAnnouncements() {
     localStorage.setItem('communityAnnouncements', JSON.stringify(allAnnouncements));
 }
 
+function saveRoadmaps() {
+    localStorage.setItem('roadmaps', JSON.stringify(allRoadmaps));
+}
+
 // Clean up listeners
 window.addEventListener('beforeunload', () => {
     if (typeof eventsListener !== 'undefined' && eventsListener) eventsListener();
     if (typeof announcementsListener !== 'undefined' && announcementsListener) announcementsListener();
     if (typeof resourcesListener !== 'undefined' && resourcesListener) resourcesListener();
+    if (typeof roadmapsListener !== 'undefined' && roadmapsListener) roadmapsListener();
 });

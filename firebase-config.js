@@ -18,11 +18,13 @@ const db = firebase.firestore();
 const eventsCollection = db.collection('events');
 const announcementsCollection = db.collection('announcements');
 const resourcesCollection = db.collection('resources');
+const roadmapsCollection = db.collection('roadmaps');
 
 // Real-time listeners
 let eventsListener = null;
 let announcementsListener = null;
 let resourcesListener = null;
+let roadmapsListener = null;
 
 // Connection status
 let isFirebaseEnabled = false;
@@ -45,3 +47,4 @@ window.db = db;
 window.eventsCollection = eventsCollection;
 window.announcementsCollection = announcementsCollection;
 window.resourcesCollection = resourcesCollection;
+window.roadmapsCollection = roadmapsCollection;
