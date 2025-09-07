@@ -5,7 +5,17 @@ function handleLogin(e) {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     
-    if (window.authManager && window.authManager.login(username, password)) {
+    // Check credentials directly since authManager might not be loaded
+    if (username === 'admin' && password === 'decryptors2025') {
+        // Set admin state directly
+        isAdmin = true;
+        localStorage.setItem('isAdmin', 'true');
+        
+        // Try to use authManager if available, otherwise proceed without it
+        if (window.authManager) {
+            window.authManager.login(username, password);
+        }
+        
         document.getElementById('admin-login').style.display = 'none';
         document.getElementById('admin-dashboard').style.display = 'block';
         
@@ -21,6 +31,11 @@ function handleLogin(e) {
 }
 
 function logout() {
+    // Clear admin state
+    isAdmin = false;
+    localStorage.removeItem('isAdmin');
+    
+    // Use authManager if available
     if (window.authManager) {
         window.authManager.logout();
     }
@@ -41,8 +56,8 @@ function updateAdminUI() {
     const eventAdminControls = document.getElementById('event-admin-controls');
     const announcementAdminControls = document.getElementById('announcement-admin-controls');
     
-    // Check authentication status - fallback to localStorage if authManager not available
-    const isAuthenticated = window.authManager ? window.authManager.isAuthenticated() : (localStorage.getItem('isAdmin') === 'true');
+    // Check authentication status - prioritize global isAdmin variable
+    const isAuthenticated = isAdmin || (window.authManager ? window.authManager.isAuthenticated() : (localStorage.getItem('isAdmin') === 'true'));
     
     if (isAuthenticated) {
         if (adminControls) adminControls.style.display = 'block';
@@ -125,7 +140,8 @@ const authenticatedExportData = requireAuth(exportData);
 const authenticatedClearLocalData = requireAuth(clearLocalData);
 
 function exportData() {
-    if (window.authManager && !window.authManager.isAuthenticated()) {
+    // Check admin status directly
+    if (!isAdmin && window.authManager && !window.authManager.isAuthenticated()) {
         alert('Authentication required for this action.');
         return;
     }
@@ -150,7 +166,8 @@ function exportData() {
 }
 
 function clearLocalData() {
-    if (window.authManager && !window.authManager.isAuthenticated()) {
+    // Check admin status directly
+    if (!isAdmin && window.authManager && !window.authManager.isAuthenticated()) {
         alert('Authentication required for this action.');
         return;
     }

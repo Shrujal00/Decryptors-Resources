@@ -1,7 +1,9 @@
 // Main application initialization and core functions
 function initializeApp() {
-    // Initialize admin state using auth manager instead of localStorage
-    initializeAdminState();
+    // Initialize admin state using localStorage first
+    isAdmin = localStorage.getItem('isAdmin') === 'true';
+    console.log('Admin state initialized from localStorage:', isAdmin);
+    
     updateAdminUI();
     generateRoadmapCards();
     showPage('home');
@@ -70,9 +72,8 @@ function updateAdminUI() {
     const eventAdminControls = document.getElementById('event-admin-controls');
     const announcementAdminControls = document.getElementById('announcement-admin-controls');
     
-    // Use auth manager if available, otherwise fall back to localStorage
-    const isAuthenticated = window.authManager ? window.authManager.isAuthenticated() : (localStorage.getItem('isAdmin') === 'true');
-    isAdmin = isAuthenticated; // Keep global state in sync
+    // Use global isAdmin variable as primary source
+    const isAuthenticated = isAdmin;
     
     if (isAuthenticated) {
         if (adminControls) adminControls.style.display = 'block';

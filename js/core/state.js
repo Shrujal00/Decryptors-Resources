@@ -26,11 +26,13 @@ function checkFirebaseConnection() {
 
 // Initialize admin state from auth manager
 function initializeAdminState() {
-    // Check if authManager is available, otherwise fall back to localStorage
-    if (window.authManager) {
+    // Check localStorage first as primary source
+    isAdmin = localStorage.getItem('isAdmin') === 'true';
+    
+    // If authManager is available and no localStorage value, check authManager
+    if (!isAdmin && window.authManager) {
         isAdmin = window.authManager.isAuthenticated();
-    } else {
-        isAdmin = localStorage.getItem('isAdmin') === 'true';
     }
+    
     console.log('Admin state initialized:', isAdmin);
 }
