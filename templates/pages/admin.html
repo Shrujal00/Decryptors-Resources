@@ -17,8 +17,8 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
-                <div class="session-warning">
-                    <small><i class="fas fa-info-circle"></i> Sessions expire after 30 minutes of inactivity</small>
+                <div class="security-notice">
+                    <small><i class="fas fa-shield-alt"></i> Credentials are securely stored in Firebase</small>
                 </div>
             </div>
         </div>
@@ -30,7 +30,6 @@
                     <!-- Session info will be populated by JavaScript -->
                 </div>
             </div>
-            <p>You are now in editing mode. You can add, edit, or remove content across the platform.</p>
             
             <div class="admin-stats">
                 <div class="stat-card">
@@ -66,6 +65,13 @@
                     </button>
                     <button class="btn btn-primary" onclick="openAddAnnouncementModal()">
                         <i class="fas fa-plus"></i> Add Announcement
+                    </button>
+                </div>
+                
+                <div class="action-group">
+                    <h3>Security</h3>
+                    <button class="btn btn-warning" onclick="openChangePasswordModal()">
+                        <i class="fas fa-key"></i> Change Password
                     </button>
                 </div>
                 

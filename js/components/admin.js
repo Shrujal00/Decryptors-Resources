@@ -1,104 +1,66 @@
 // Admin functions and UI management
-function handleLogin(e) {
-    e.preventDefault();
-    
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    
-    // Check credentials directly since authManager might not be loaded
-    if (username === 'admin' && password === 'decryptors2025') {
-        // Set admin state directly
-        isAdmin = true;
-        localStorage.setItem('isAdmin', 'true');
-        
-        // Try to use authManager if available, otherwise proceed without it
-        if (window.authManager) {
-            window.authManager.login(username, password);
-        }
-        
-        document.getElementById('admin-login').style.display = 'none';
-        document.getElementById('admin-dashboard').style.display = 'block';
-        
-        updateAdminUI();
-        generateRoadmapCards();
-        updateAdminStats();
-        alert('Login successful! You can now edit resources.');
-    } else {
-        alert('Invalid credentials. Please try again.');
-        // Clear password field for security
-        document.getElementById('password').value = '';
-    }
-}
-
-function logout() {
-    // Clear admin state
-    isAdmin = false;
-    localStorage.removeItem('isAdmin');
-    
-    // Use authManager if available
-    if (window.authManager) {
-        window.authManager.logout();
-    }
-    
-    document.getElementById('admin-login').style.display = 'block';
-    document.getElementById('admin-dashboard').style.display = 'none';
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    
-    updateAdminUI();
-    generateRoadmapCards();
-    
-    alert('You have been logged out successfully.');
-}
 
 function updateAdminUI() {
     const adminControls = document.getElementById('admin-controls');
     const eventAdminControls = document.getElementById('event-admin-controls');
     const announcementAdminControls = document.getElementById('announcement-admin-controls');
     
-    // Check authentication status - prioritize global isAdmin variable
-    const isAuthenticated = isAdmin || (window.authManager ? window.authManager.isAuthenticated() : (localStorage.getItem('isAdmin') === 'true'));
+    // Check if user is admin or superuser using the new auth system
+    const isAuthenticated = authSystem && authSystem.currentUser && 
+        (authSystem.currentUser.role === 'admin' || authSystem.currentUser.role === 'superuser');
+    
+    console.log('🔄 Updating admin UI - authenticated:', isAuthenticated);
     
     if (isAuthenticated) {
-        if (adminControls) adminControls.style.display = 'block';
-        if (eventAdminControls) eventAdminControls.style.display = 'block';
-        if (announcementAdminControls) announcementAdminControls.style.display = 'block';
-        
-        // Update admin stats if on admin page
-        updateAdminStats();
-        
-        // Show session info if on admin page
-        showSessionInfo();
+        if (adminControls) {
+            adminControls.style.display = 'block';
+            console.log('✅ Admin controls shown');
+        }
+        if (eventAdminControls) {
+            eventAdminControls.style.display = 'block';
+            console.log('✅ Event admin controls shown');
+        }
+        if (announcementAdminControls) {
+            announcementAdminControls.style.display = 'block';
+            console.log('✅ Announcement admin controls shown');
+        }
     } else {
-        if (adminControls) adminControls.style.display = 'none';
-        if (eventAdminControls) eventAdminControls.style.display = 'none';
-        if (announcementAdminControls) announcementAdminControls.style.display = 'none';
-        
-        // Ensure admin state is properly reset
-        isAdmin = false;
-    }
-}
-
-function showSessionInfo() {
-    if (!window.authManager) return;
-    
-    const sessionInfo = window.authManager.getSessionInfo();
-    if (sessionInfo) {
-        const sessionInfoEl = document.getElementById('session-info');
-        if (sessionInfoEl) {
-            sessionInfoEl.innerHTML = `
-                <small>
-                    Session: ${sessionInfo.timeRemaining} minutes remaining
-                    <br>Logged in: ${sessionInfo.sessionAge} minutes ago
-                </small>
-            `;
+        if (adminControls) {
+            adminControls.style.display = 'none';
+            console.log('❌ Admin controls hidden');
+        }
+        if (eventAdminControls) {
+            eventAdminControls.style.display = 'none';
+            console.log('❌ Event admin controls hidden');
+        }
+        if (announcementAdminControls) {
+            announcementAdminControls.style.display = 'none';
+            console.log('❌ Announcement admin controls hidden');
         }
     }
 }
 
-// Add new admin utility functions
+function canManageContent() {
+    return authSystem && authSystem.currentUser && 
+        (authSystem.currentUser.role === 'admin' || authSystem.currentUser.role === 'superuser');
+}
+
+function canManageRoles() {
+    return authSystem && authSystem.currentUser && authSystem.currentUser.role === 'superuser';
+}
+
+function canEditProfile(targetUserId) {
+    if (!authSystem || !authSystem.currentUser) return false;
+    if (authSystem.currentUser.role === 'superuser') return true;
+    if (authSystem.currentUser.role === 'admin') return true;
+    return authSystem.currentUser.id === targetUserId;
+}
+
 function updateAdminStats() {
-    if (!isAdmin) return;
+    if (!authSystem || !authSystem.currentUser || 
+        (authSystem.currentUser.role !== 'admin' && authSystem.currentUser.role !== 'superuser')) {
+        return;
+    }
     
     // Update roadmaps count
     const roadmapsCount = Object.keys(allRoadmaps).length > 0 ? Object.keys(allRoadmaps).length : Object.keys(roadmapData).length;
@@ -123,25 +85,9 @@ function updateAdminStats() {
     if (announcementsCountEl) announcementsCountEl.textContent = allAnnouncements.length;
 }
 
-// Admin action middleware - check authentication before performing admin actions
-function requireAuth(action) {
-    return function(...args) {
-        if (!authManager.isAuthenticated()) {
-            alert('Your session has expired. Please log in again.');
-            authManager.forceLogout();
-            return false;
-        }
-        return action.apply(this, args);
-    };
-}
-
-// Wrap admin functions with authentication middleware
-const authenticatedExportData = requireAuth(exportData);
-const authenticatedClearLocalData = requireAuth(clearLocalData);
-
 function exportData() {
-    // Check admin status directly
-    if (!isAdmin && window.authManager && !window.authManager.isAuthenticated()) {
+    if (!authSystem || !authSystem.currentUser || 
+        (authSystem.currentUser.role !== 'admin' && authSystem.currentUser.role !== 'superuser')) {
         alert('Authentication required for this action.');
         return;
     }
@@ -166,8 +112,8 @@ function exportData() {
 }
 
 function clearLocalData() {
-    // Check admin status directly
-    if (!isAdmin && window.authManager && !window.authManager.isAuthenticated()) {
+    if (!authSystem || !authSystem.currentUser || 
+        (authSystem.currentUser.role !== 'admin' && authSystem.currentUser.role !== 'superuser')) {
         alert('Authentication required for this action.');
         return;
     }

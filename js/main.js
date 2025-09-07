@@ -10,16 +10,58 @@ function initializeApp() {
     console.log('App initialized');
 }
 
+function setupEventListeners() {
+    console.log('Setting up event listeners...');
+    
+    // Initialize navbar separately
+    initializeNavbar();
+
+    // Forms
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) loginForm.addEventListener('submit', handleLogin);
+
+    const addResourceForm = document.getElementById('add-resource-form');
+    if (addResourceForm) addResourceForm.addEventListener('submit', handleAddResource);
+
+    const addEventForm = document.getElementById('add-event-form');
+    if (addEventForm) addEventForm.addEventListener('submit', handleAddEvent);
+
+    const addAnnouncementForm = document.getElementById('add-announcement-form');
+    if (addAnnouncementForm) addAnnouncementForm.addEventListener('submit', handleAddAnnouncement);
+
+    const addRoadmapForm = document.getElementById('add-roadmap-form');
+    if (addRoadmapForm) addRoadmapForm.addEventListener('submit', handleAddRoadmap);
+
+    // Search and filter
+    const resourceSearch = document.getElementById('resource-search');
+    if (resourceSearch) resourceSearch.addEventListener('input', filterResources);
+    
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            filterResources();
+        });
+    });
+
+    // Setup auth event listeners
+    setupAuthEventListeners();
+
+    console.log('Event listeners set up complete');
+}
+
 function showPage(page, field = '') {
     console.log('Showing page:', page, field);
     
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
     
     const pageElement = document.getElementById(page);
     if (pageElement) {
         pageElement.classList.add('active');
         currentPage = page;
+        
+        // Update active nav link
+        updateActiveNavLink(page);
         
         if (page === 'roadmap' && field) {
             currentField = field;
@@ -29,7 +71,25 @@ function showPage(page, field = '') {
             displayAnnouncements();
         } else if (page === 'home') {
             generateRoadmapCards();
+        } else if (page === 'profile') {
+            loadProfile();
+        } else if (page === 'members') {
+            document.getElementById('members-count').textContent = 'Loading...';
+            loadMembersDirectory().then(() => {
+                document.getElementById('members-count').textContent = allMembers.length;
+            }).catch(() => {
+                document.getElementById('members-count').textContent = '0';
+            });
+        } else if (page === 'auth') {
+            showLoginPage();
         }
+        
+        // Update admin UI for the new page
+        setTimeout(() => {
+            if (typeof updateAdminUI === 'function') {
+                updateAdminUI();
+            }
+        }, 100);
     }
 
     const activeLink = document.querySelector(`[data-page="${page}"]`);
@@ -40,17 +100,34 @@ function showPage(page, field = '') {
 
 // Initialize application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing app...');
+    console.log('🚀 DOM loaded, initializing app...');
     
     setTimeout(() => {
         checkFirebaseConnection();
-        initializeApp();
-        setupEventListeners();
         
         if (window.isFirebaseEnabled) {
-            initializeFirebaseListeners();
-            seedDefaultData();
+            console.log('🔥 Firebase enabled - initializing all services...');
+            
+            // Initialize auth system first
+            if (window.authSystem) {
+                authSystem.initializeAuth().then(() => {
+                    initializeApp();
+                    setupEventListeners();
+                    initializeFirebaseListeners();
+                    seedDefaultData();
+                    
+                    // Force UI update after everything is loaded
+                    setTimeout(() => {
+                        authSystem.updateUI();
+                    }, 500);
+                });
+            } else {
+                console.error('❌ Auth system not available');
+            }
         } else {
+            console.warn('⚠️ Firebase disabled - limited functionality');
+            initializeApp();
+            setupEventListeners();
             loadLocalData();
         }
         
@@ -64,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (icon) icon.style.transform = 'rotate(180deg)';
             });
         }, 100);
-    }, 500); // Reduced timeout
+    }, 1500);
 });
 
 function updateAdminUI() {

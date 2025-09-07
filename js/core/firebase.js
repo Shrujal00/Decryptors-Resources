@@ -105,6 +105,16 @@ function initializeFirebaseListeners() {
     if (!window.isFirebaseEnabled) return;
 
     try {
+        // Listen for users changes (for members directory)
+        usersListener = db.collection('users').where('isHidden', '!=', true).onSnapshot((snapshot) => {
+            console.log('👥 Users synced from Firebase');
+            if (currentPage === 'members') {
+                loadMembersDirectory();
+            }
+        }, (error) => {
+            console.error('Users listener error:', error);
+        });
+
         // Listen for roadmaps changes
         roadmapsListener = roadmapsCollection.onSnapshot((snapshot) => {
             allRoadmaps = {};
@@ -159,4 +169,61 @@ function initializeFirebaseListeners() {
         console.error('Error setting up Firebase listeners:', error);
         loadLocalData();
     }
+}
+
+// Initialize Firebase auth on app load
+async function initializeFirebaseAuth() {
+    console.log('🔧 Initializing Firebase authentication...');
+    
+    if (!window.isFirebaseEnabled) {
+        console.warn('⚠️ Firebase not enabled - admin authentication will not work');
+        return;
+    }
+
+    if (typeof db === 'undefined') {
+        console.error('❌ Firebase database not available for auth initialization');
+        return;
+    }
+
+    try {
+        console.log('🔍 Checking for existing admin document...');
+        const authDoc = await db.collection('auth').doc('admin').get();
+        
+        if (!authDoc.exists) {
+            console.log('📝 Admin document not found, creating new one...');
+            const hashedPassword = await hashPassword('decryptors2025');
+            
+            const adminData = {
+                username: 'admin',
+                password: hashedPassword,
+                createdAt: new Date().toISOString(),
+                lastLogin: null,
+                isActive: true
+            };
+            
+            console.log('💾 Saving admin credentials to Firebase...');
+            await db.collection('auth').doc('admin').set(adminData);
+            
+            console.log('✅ Admin authentication configured successfully');
+            console.log('🔑 Username: admin');
+            console.log('🔑 Password: decryptors2025');
+        } else {
+            console.log('✅ Admin document already exists');
+            const authData = authDoc.data();
+            console.log('📊 Admin created:', authData.createdAt);
+            console.log('📊 Last login:', authData.lastLogin || 'Never');
+        }
+    } catch (error) {
+        console.error('💥 Error initializing Firebase auth:', error);
+        console.error('🔍 Error details:', error.message);
+    }
+}
+
+// Hash function for auth initialization
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password + 'decryptors_salt_2025');
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
