@@ -135,7 +135,7 @@ const defaultResources = {
 };
 
 const defaultEvents = [
-    { id: '1', title: 'JavaScript Workshop', description: 'Learn the fundamentals of JavaScript in this hands-on workshop.', date: '2024-12-20', time: '6:00 PM - 8:00 PM' }
+    // No default events - create events through the admin interface
 ];
 
 const defaultAnnouncements = [

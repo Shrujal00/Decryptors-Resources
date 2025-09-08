@@ -1,3 +1,5 @@
+@import url('css/eventForms.css');
+
 :root {
     --primary-color: #6366f1;
     --secondary-color: #8b5cf6;
@@ -1152,13 +1154,277 @@ body.modal-open {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
     gap: 0.5rem;
+    z-index: 15;
+    transition: all 0.25s ease-in-out;
+    transform: translateY(-8px);
+    pointer-events: none;
 }
 
+/* Show on card hover - use descendant selector instead of direct child */
 .announcement-card:hover .item-actions,
 .event-card:hover .item-actions {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Ensure hover state is maintained when hovering the buttons themselves */
+.item-actions:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Event Actions */
+.event-actions {
+    margin-top: 1rem;
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Registration Button */
+.register-btn {
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    background: linear-gradient(135deg, #0891b2, #5a5df0);
+}
+
+.register-btn:disabled,
+.register-btn[disabled] {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.register-btn:disabled:hover,
+.register-btn[disabled]:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Admin Form Builder Buttons */
+.form-builder-btn {
+    background: var(--surface-color);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.form-builder-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-builder-btn.create-form-btn {
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.form-builder-btn.create-form-btn:hover {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+/* View Responses Button */
+.view-responses-btn {
+    background: var(--surface-color);
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.view-responses-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+/* Registration Status */
+.registration-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.registration-status.open {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.registration-status.closed {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Admin Item Actions */
+.item-actions .action-btn {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.item-actions .action-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+.item-actions .action-btn.edit:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+.item-actions .action-btn.delete:hover {
+    background: var(--error-color);
+    border-color: var(--error-color);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+.item-actions .action-btn i {
+    font-size: 0.875rem;
+}
+
+/* Ensure edit/delete buttons don't interfere with other content */
+.event-card {
+    overflow: visible;
+}
+
+.event-actions {
+    position: relative;
+    z-index: 1;
+}
+
+/* Event Actions Container */
+.event-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: flex-start;
+}
+
+.event-actions .register-btn {
+    align-self: stretch;
+    margin-bottom: 0.5rem;
+}
+
+.event-actions .item-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Separate admin action buttons from user actions */
+.admin-form-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive Design for Event Actions */
+@media (max-width: 768px) {
+    .event-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: stretch;
+    }
+    
+    .register-btn,
+    .form-builder-btn,
+    .view-responses-btn {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .admin-form-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .item-actions {
+        position: static;
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    
+    .announcement-card .item-actions,
+    .event-card .item-actions {
+        display: flex;
+    }
 }
 
 /* Empty state */

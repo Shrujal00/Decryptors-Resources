@@ -1,13 +1,18 @@
 // Firebase initialization and data management
 function loadLocalData() {
-    allResources = JSON.parse(localStorage.getItem('roadmapResources')) || defaultResources;
-    allEvents = JSON.parse(localStorage.getItem('communityEvents')) || defaultEvents;
-    allAnnouncements = JSON.parse(localStorage.getItem('communityAnnouncements')) || defaultAnnouncements;
-    
-    displayEvents();
-    displayAnnouncements();
-    generateRoadmapCards();
-    console.log('Local data loaded');
+    // Only load local data if Firebase is not enabled
+    if (!window.isFirebaseEnabled) {
+        allResources = JSON.parse(localStorage.getItem('roadmapResources')) || defaultResources;
+        allEvents = JSON.parse(localStorage.getItem('communityEvents')) || defaultEvents;
+        allAnnouncements = JSON.parse(localStorage.getItem('communityAnnouncements')) || defaultAnnouncements;
+        
+        displayEvents();
+        displayAnnouncements();
+        generateRoadmapCards();
+        console.log('Local data loaded (Firebase disabled)');
+    } else {
+        console.log('Firebase enabled - skipping local data load');
+    }
 }
 
 async function seedDefaultData() {
@@ -34,6 +39,9 @@ async function seedDefaultData() {
             }
         }
 
+        // NOTE: Events seeding disabled to prevent automatic re-creation
+        // Uncomment below if you want to seed default events on first setup
+        /*
         const eventsSnapshot = await eventsCollection.get();
         if (eventsSnapshot.empty) {
             console.log('Seeding default events...');
@@ -41,6 +49,7 @@ async function seedDefaultData() {
                 await eventsCollection.add(event);
             }
         }
+        */
 
         const announcementsSnapshot = await announcementsCollection.get();
         if (announcementsSnapshot.empty) {
@@ -105,6 +114,11 @@ function initializeFirebaseListeners() {
     if (!window.isFirebaseEnabled) return;
 
     try {
+        // Clear localStorage to prevent conflicts with Firebase data
+        localStorage.removeItem('communityEvents');
+        localStorage.removeItem('communityAnnouncements');
+        console.log('🧹 Cleared localStorage to prevent duplicates with Firebase');
+
         // Listen for users changes (for members directory)
         usersListener = db.collection('users').where('isHidden', '!=', true).onSnapshot((snapshot) => {
             console.log('👥 Users synced from Firebase');
@@ -227,3 +241,22 @@ async function hashPassword(password) {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
+
+// Helper function to clear all data and start fresh
+function clearAllData() {
+    // Clear localStorage
+    localStorage.clear();
+    
+    // Clear in-memory arrays
+    allEvents = [];
+    allAnnouncements = [];
+    
+    // Refresh displays
+    displayEvents();
+    displayAnnouncements();
+    
+    console.log('🧹 All local data cleared. Refresh page to sync with Firebase.');
+}
+
+// Make it available globally for debugging
+window.clearAllData = clearAllData;

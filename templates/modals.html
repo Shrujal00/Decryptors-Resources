@@ -119,3 +119,142 @@
         </form>
     </div>
 </div>
+
+<!-- Event Registration Modal -->
+<div id="event-registration-modal" class="modal">
+    <div class="modal-content registration-modal">
+        <div class="modal-header">
+            <h2>
+                <i class="fas fa-calendar-plus"></i>
+                <span id="registration-event-title">Event Registration</span>
+            </h2>
+            <div class="modal-actions">
+                <span id="auto-save-status" class="field-note" style="display: none;">
+                    <i class="fas fa-save"></i> Progress saved
+                </span>
+                <span class="close" onclick="closeRegistrationModal()">&times;</span>
+            </div>
+        </div>
+        <div class="modal-body">
+            <form id="event-registration-form">
+                <div id="registration-fields-container">
+                    <!-- Dynamic registration fields will be inserted here -->
+                </div>
+                
+                <div id="team-registration-section" style="display: none;">
+                    <!-- Team registration fields will be inserted here -->
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeRegistrationModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Registration
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Form Builder Modal -->
+<div id="form-builder-modal" class="modal">
+    <div class="modal-content form-builder-modal">
+        <div class="modal-header">
+            <h2>
+                <i class="fas fa-form"></i>
+                <span id="form-builder-title">Create Registration Form</span>
+            </h2>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeFormBuilderModal()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="enable-team-registration">
+                    Enable Team Registration
+                </label>
+                <span class="field-note">Allow participants to register as teams with multiple members</span>
+            </div>
+            
+            <div id="team-settings" style="display: none;">
+                <div class="form-group">
+                    <label for="min-team-size">Minimum Team Size:</label>
+                    <input type="number" id="min-team-size" min="2" max="10" value="2">
+                </div>
+                <div class="form-group">
+                    <label for="max-team-size">Maximum Team Size:</label>
+                    <input type="number" id="max-team-size" min="2" max="10" value="5">
+                </div>
+            </div>
+            
+            <div class="form-fields-container">
+                <h3>Registration Fields</h3>
+                <div id="form-fields-list">
+                    <!-- Dynamic form fields will be inserted here -->
+                </div>
+                
+                <div class="add-field-section">
+                    <h4>Add New Field</h4>
+                    <div class="add-field-buttons">
+                        <button type="button" class="add-field-btn" onclick="addFormField('text')">
+                            <i class="fas fa-font"></i> Text Field
+                        </button>
+                        <button type="button" class="add-field-btn" onclick="addFormField('email')">
+                            <i class="fas fa-envelope"></i> Email Field
+                        </button>
+                        <button type="button" class="add-field-btn" onclick="addFormField('tel')">
+                            <i class="fas fa-phone"></i> Phone Field
+                        </button>
+                        <button type="button" class="add-field-btn" onclick="addFormField('textarea')">
+                            <i class="fas fa-align-left"></i> Text Area
+                        </button>
+                        <button type="button" class="add-field-btn" onclick="addFormField('select')">
+                            <i class="fas fa-list"></i> Dropdown
+                        </button>
+                        <button type="button" class="add-field-btn" onclick="addFormField('checkbox')">
+                            <i class="fas fa-check-square"></i> Checkbox
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeFormBuilderModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveEventForm()">
+                    <i class="fas fa-save"></i>
+                    Save Form
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Registration Success Modal -->
+<div id="registration-success-modal" class="modal">
+    <div class="modal-content success-modal">
+        <div class="success-header">
+            <i class="fas fa-check-circle"></i>
+            <h2>Registration Successful!</h2>
+        </div>
+        <div class="success-body">
+            <p>Thank you for registering! We've received your submission and will contact you with further details.</p>
+            
+            <div class="registration-summary">
+                <h4>Registration Details:</h4>
+                <div id="registration-summary-content">
+                    <!-- Summary content will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+        <div class="success-actions">
+            <button type="button" class="btn btn-primary" onclick="closeSuccessModal()">
+                <i class="fas fa-check"></i>
+                Continue
+            </button>
+        </div>
+    </div>
+</div>

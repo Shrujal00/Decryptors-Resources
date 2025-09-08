@@ -122,6 +122,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     initializeFirebaseListeners();
                     seedDefaultData();
                     
+                    // Initialize Event Forms Manager
+                    if (typeof EventFormsManager !== 'undefined') {
+                        window.eventFormsManager = new EventFormsManager();
+                        console.log('✅ Event Forms Manager initialized');
+                    }
+                    
                     // Force UI update after everything is loaded
                     setTimeout(() => {
                         authSystem.updateUI();
