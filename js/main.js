@@ -60,6 +60,12 @@ function showPage(page, field = '') {
         pageElement.classList.add('active');
         currentPage = page;
         
+        // Scroll to top of the page
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        
         // Update active nav link
         updateActiveNavLink(page);
         
@@ -165,6 +171,27 @@ function updateAdminUI() {
         if (adminControls) adminControls.style.display = 'none';
         if (eventAdminControls) eventAdminControls.style.display = 'none';
         if (announcementAdminControls) announcementAdminControls.style.display = 'none';
+    }
+}
+
+// Handle Join Community button click
+function handleJoinCommunity() {
+    // Check if user is logged in
+    if (window.currentUser || (window.authSystem && window.authSystem.currentUser)) {
+        // User is logged in, redirect to community page
+        showPage('community');
+    } else {
+        // User is not logged in, redirect to signup page
+        showPage('auth');
+        // Optionally switch to register form if available
+        setTimeout(() => {
+            const registerSection = document.getElementById('register-section');
+            const loginSection = document.getElementById('login-section');
+            if (registerSection && loginSection) {
+                loginSection.classList.remove('active');
+                registerSection.classList.add('active');
+            }
+        }, 100);
     }
 }
 
