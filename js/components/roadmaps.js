@@ -8,6 +8,9 @@ function generateRoadmapCards() {
     // Use Firebase roadmaps if available, otherwise use static data
     const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
     
+    // Check admin status
+    const isCurrentAdmin = window.currentUser && (window.currentUser.role === 'admin' || window.currentUser.role === 'superuser');
+    
     Object.entries(roadmapsToUse).forEach(([key, roadmap]) => {
         const card = document.createElement('div');
         card.className = 'roadmap-card';
@@ -17,7 +20,7 @@ function generateRoadmapCards() {
             <i class="${roadmap.icon}"></i>
             <h3>${roadmap.title}</h3>
             <p>${roadmap.description}</p>
-            ${isAdmin ? `
+            ${isCurrentAdmin ? `
             <div class="roadmap-actions">
                 <button class="action-btn edit" onclick="event.stopPropagation(); editRoadmap('${key}')" title="Edit">
                     <i class="fas fa-edit"></i>
@@ -33,7 +36,7 @@ function generateRoadmapCards() {
     });
     
     // Add "Add Roadmap" card for admin
-    if (isAdmin) {
+    if (isCurrentAdmin) {
         const addCard = document.createElement('div');
         addCard.className = 'roadmap-card add-roadmap-card';
         addCard.onclick = () => openAddRoadmapModal();
@@ -62,6 +65,9 @@ function loadRoadmap(field) {
     const timeline = document.getElementById('roadmap-timeline');
     timeline.innerHTML = '';
 
+    // Check admin status
+    const isCurrentAdmin = window.currentUser && (window.currentUser.role === 'admin' || window.currentUser.role === 'superuser');
+
     roadmap.steps.forEach((step, index) => {
         const timelineItem = document.createElement('div');
         timelineItem.className = 'timeline-item';
@@ -71,7 +77,7 @@ function loadRoadmap(field) {
             <div class="timeline-content">
                 <h3>${step.title}</h3>
                 <p>${step.description}</p>
-                ${isAdmin ? `
+                ${isCurrentAdmin ? `
                 <div class="step-actions">
                     <button class="action-btn edit" onclick="editStep('${field}', ${index})" title="Edit Step">
                         <i class="fas fa-edit"></i>
@@ -88,7 +94,7 @@ function loadRoadmap(field) {
     });
 
     // Add "Add Step" button for admin
-    if (isAdmin) {
+    if (isCurrentAdmin) {
         const addStepItem = document.createElement('div');
         addStepItem.className = 'timeline-item add-step-item';
         addStepItem.innerHTML = `

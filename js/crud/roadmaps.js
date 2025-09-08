@@ -101,3 +101,83 @@ async function deleteRoadmap(roadmapId) {
         alert('Error deleting roadmap: ' + error.message);
     }
 }
+
+// Step management functions
+function addStep(field) {
+    const isCurrentAdmin = window.currentUser && (window.currentUser.role === 'admin' || window.currentUser.role === 'superuser');
+    if (!isCurrentAdmin) return;
+    
+    const title = prompt('Enter step title:');
+    if (!title) return;
+    
+    const description = prompt('Enter step description:');
+    if (!description) return;
+    
+    const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
+    const roadmap = roadmapsToUse[field];
+    if (!roadmap) return;
+    
+    const newStep = { title, description };
+    roadmap.steps.push(newStep);
+    
+    saveRoadmapChanges(field, roadmap);
+    loadRoadmap(field);
+}
+
+function editStep(field, stepIndex) {
+    const isCurrentAdmin = window.currentUser && (window.currentUser.role === 'admin' || window.currentUser.role === 'superuser');
+    if (!isCurrentAdmin) return;
+    
+    const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
+    const roadmap = roadmapsToUse[field];
+    if (!roadmap || !roadmap.steps[stepIndex]) return;
+    
+    const step = roadmap.steps[stepIndex];
+    const newTitle = prompt('Edit step title:', step.title);
+    if (newTitle === null) return;
+    
+    const newDescription = prompt('Edit step description:', step.description);
+    if (newDescription === null) return;
+    
+    roadmap.steps[stepIndex] = { title: newTitle, description: newDescription };
+    
+    saveRoadmapChanges(field, roadmap);
+    loadRoadmap(field);
+}
+
+function deleteStep(field, stepIndex) {
+    const isCurrentAdmin = window.currentUser && (window.currentUser.role === 'admin' || window.currentUser.role === 'superuser');
+    if (!isCurrentAdmin || !confirm('Are you sure you want to delete this step?')) return;
+    
+    const roadmapsToUse = Object.keys(allRoadmaps).length > 0 ? allRoadmaps : roadmapData;
+    const roadmap = roadmapsToUse[field];
+    if (!roadmap || !roadmap.steps[stepIndex]) return;
+    
+    roadmap.steps.splice(stepIndex, 1);
+    
+    saveRoadmapChanges(field, roadmap);
+    loadRoadmap(field);
+}
+
+async function saveRoadmapChanges(field, roadmap) {
+    try {
+        if (window.isFirebaseEnabled && typeof roadmapsCollection !== 'undefined') {
+            await roadmapsCollection.doc(field).update({
+                ...roadmap,
+                updatedAt: new Date().toISOString()
+            });
+            console.log('Roadmap steps updated in Firebase successfully');
+        } else {
+            allRoadmaps[field] = roadmap;
+            saveRoadmaps();
+        }
+    } catch (error) {
+        console.error('Error saving roadmap changes:', error);
+        alert('Error saving changes: ' + error.message);
+    }
+}
+
+function saveRoadmaps() {
+    localStorage.setItem('roadmaps', JSON.stringify(allRoadmaps));
+    generateRoadmapCards();
+}
