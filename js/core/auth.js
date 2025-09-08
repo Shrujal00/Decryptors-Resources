@@ -70,6 +70,7 @@ class AuthSystem {
                 const session = JSON.parse(sessionData);
                 if (session.expiresAt > Date.now()) {
                     this.currentUser = session.user;
+                    window.currentUser = this.currentUser;
                     console.log('✅ Session restored for:', this.currentUser.username);
                     this.updateUI();
                 } else {
@@ -252,6 +253,7 @@ class AuthSystem {
     logout() {
         console.log('🚪 Logging out user:', this.currentUser?.username);
         this.currentUser = null;
+        window.currentUser = null;
         localStorage.removeItem('userSession');
         
         // Also clear old admin state for compatibility
@@ -276,11 +278,17 @@ class AuthSystem {
 
     updateUI() {
         // Update global state
+        window.currentUser = this.currentUser;
         isAdmin = this.currentUser && (this.currentUser.role === 'admin' || this.currentUser.role === 'superuser');
         
         // Update admin UI controls
         if (typeof updateAdminUI === 'function') {
             updateAdminUI();
+        }
+        
+        // Update navbar
+        if (typeof updateNavbar === 'function') {
+            updateNavbar();
         }
         
         // Update auth section in navbar
@@ -295,17 +303,8 @@ class AuthSystem {
         if (!authSection) return;
 
         if (this.currentUser) {
-            authSection.innerHTML = `
-                <div class="user-menu">
-                    <span class="user-greeting">Welcome, ${this.currentUser.fullName || this.currentUser.username}</span>
-                    <button class="btn btn-profile" onclick="showPage('profile')">
-                        <i class="fas fa-user"></i> Profile
-                    </button>
-                    <button class="btn btn-logout" onclick="authSystem.logout()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            `;
+            // Don't override the auth section - let navbar.js handle user display
+            authSection.style.display = 'none';
         } else {
             authSection.innerHTML = `
                 <button class="btn btn-primary" onclick="showPage('auth')">Login / Sign Up</button>

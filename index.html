@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decryptors - Your Programming Journey Starts Here</title>
-    <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -15,6 +15,8 @@
                 <i class="fas fa-code"></i>
                 <span>Decryptors</span>
             </div>
+            
+            <!-- Desktop Menu -->
             <ul class="nav-menu">
                 <li><a href="#" data-page="home" class="nav-link active">Home</a></li>
                 <li class="dropdown">
@@ -34,13 +36,82 @@
                 <li><a href="#" data-page="community" class="nav-link">Community</a></li>
                 <li><a href="#" data-page="members" class="nav-link">Members</a></li>
             </ul>
+            
+            <!-- Desktop Auth Section -->
             <div id="auth-section" class="auth-section">
                 <button class="btn btn-primary" onclick="showPage('auth')">Login / Sign Up</button>
             </div>
-            <div class="hamburger">
+            
+            <!-- User Dropdown (hidden by default) -->
+            <div id="user-dropdown" class="user-dropdown" style="display: none;">
+                <div class="user-avatar" onclick="toggleUserDropdown()">
+                    <span style="font-weight: 600; font-size: 1rem; color: white;">U</span>
+                </div>
+                <div class="user-dropdown-content">
+                    <div class="user-info">
+                        <div class="user-name" id="user-display-name">User Name</div>
+                        <div class="user-role" id="user-display-role">Member</div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item" onclick="showPage('profile'); closeUserDropdown()">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <a href="#" class="dropdown-item logout-item" onclick="logout(); closeUserDropdown()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile Hamburger -->
+            <div class="hamburger" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+            <div class="mobile-menu-header">
+                <div class="mobile-menu-logo">
+                    <i class="fas fa-code"></i>
+                    <span>Decryptors</span>
+                </div>
+                <button class="mobile-menu-close" onclick="closeMobileMenu()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mobile-menu-content">
+                <a href="#" data-page="home" class="mobile-nav-link" onclick="closeMobileMenu()">
+                    <i class="fas fa-home"></i>Home
+                </a>
+                <div class="mobile-dropdown">
+                    <a href="#" class="mobile-nav-link mobile-dropdown-toggle" onclick="toggleMobileDropdown()">
+                        <i class="fas fa-route"></i>Roadmaps <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="mobile-dropdown-content">
+                        <a href="#" data-page="roadmap" data-field="fullstack" class="mobile-sub-link" onclick="closeMobileMenu()">Full Stack Development</a>
+                        <a href="#" data-page="roadmap" data-field="app" class="mobile-sub-link" onclick="closeMobileMenu()">App Development</a>
+                        <a href="#" data-page="roadmap" data-field="dsa" class="mobile-sub-link" onclick="closeMobileMenu()">DSA</a>
+                        <a href="#" data-page="roadmap" data-field="cybersecurity" class="mobile-sub-link" onclick="closeMobileMenu()">Cybersecurity</a>
+                        <a href="#" data-page="roadmap" data-field="network" class="mobile-sub-link" onclick="closeMobileMenu()">Network Engineering</a>
+                        <a href="#" data-page="roadmap" data-field="cloud" class="mobile-sub-link" onclick="closeMobileMenu()">Cloud Engineering</a>
+                        <a href="#" data-page="roadmap" data-field="datascience" class="mobile-sub-link" onclick="closeMobileMenu()">Data Science</a>
+                        <a href="#" data-page="roadmap" data-field="ml" class="mobile-sub-link" onclick="closeMobileMenu()">Machine Learning</a>
+                        <a href="#" data-page="roadmap" data-field="ai" class="mobile-sub-link" onclick="closeMobileMenu()">Artificial Intelligence</a>
+                    </div>
+                </div>
+                <a href="#" data-page="community" class="mobile-nav-link" onclick="closeMobileMenu()">
+                    <i class="fas fa-users"></i>Community
+                </a>
+                <a href="#" data-page="members" class="mobile-nav-link" onclick="closeMobileMenu()">
+                    <i class="fas fa-user-friends"></i>Members
+                </a>
+                <div class="mobile-auth">
+                    <button class="btn btn-primary mobile-login-btn" onclick="showPage('auth'); closeMobileMenu()">
+                        <i class="fas fa-sign-in-alt"></i>Login / Sign Up
+                    </button>
+                </div>
             </div>
         </div>
     </nav>

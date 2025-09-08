@@ -168,6 +168,15 @@ function updateAdminUI() {
     }
 }
 
+// Global logout function for navbar compatibility
+function logout() {
+    if (window.authSystem) {
+        authSystem.logout();
+    } else {
+        console.error('Auth system not available for logout');
+    }
+}
+
 // Clean up listeners
 window.addEventListener('beforeunload', () => {
     if (typeof eventsListener !== 'undefined' && eventsListener) eventsListener();

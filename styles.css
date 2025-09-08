@@ -58,6 +58,7 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--primary-color);
+    cursor: pointer;
 }
 
 .nav-menu {
@@ -137,10 +138,373 @@ body {
     transition: 0.3s;
 }
 
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(20px);
+    transition: right 0.4s ease;
+    z-index: 1000;
+    border-left: 1px solid var(--border-color);
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(30, 41, 59, 0.8);
+}
+
+.mobile-menu-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.mobile-menu-logo i {
+    font-size: 1.5rem;
+}
+
+.mobile-menu-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-close:hover {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+}
+
+.mobile-menu-content {
+    padding: 1rem 0 2rem 0;
+    height: calc(100% - 70px);
+    overflow-y: auto;
+}
+
+@media (max-width: 480px) {
+    .mobile-menu {
+        width: 260px;
+    }
+    
+    .mobile-nav-link {
+        padding: 1rem 1.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .mobile-sub-link {
+        padding: 0.875rem 2.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .mobile-auth {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+    }
+    
+    .mobile-login-btn {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+.mobile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+}
+
+.mobile-nav-link:hover {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+}
+
+.mobile-nav-link i {
+    font-size: 1.1rem;
+    width: 20px;
+    color: var(--primary-color);
+}
+
+.mobile-dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: var(--surface-color);
+}
+
+.mobile-dropdown-content.active {
+    max-height: 500px;
+}
+
+.mobile-sub-link {
+    display: block;
+    padding: 1rem 3rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.1);
+}
+
+.mobile-sub-link:hover {
+    background-color: var(--card-color);
+    color: var(--text-primary);
+}
+
+.mobile-dropdown-toggle .fa-chevron-down {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.mobile-dropdown-toggle.active .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.mobile-auth {
+    padding: 1.5rem 2rem 2rem 2rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+}
+
+.mobile-login-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.mobile-login-btn:hover {
+    background-color: #5a5df0;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+}
+
+.mobile-user-compact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.mobile-user-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.mobile-user-avatar i {
+    font-size: 1.25rem;
+    color: white;
+}
+
+.mobile-user-details {
+    flex: 1;
+}
+
+.mobile-user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.mobile-user-role {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: capitalize;
+}
+
+.mobile-user-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.mobile-action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mobile-action-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+}
+
+.mobile-action-btn.logout-btn {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    border-color: rgba(244, 67, 54, 0.3);
+}
+
+.mobile-action-btn.logout-btn:hover {
+    background: rgba(244, 67, 54, 0.2);
+}
+
+/* User Dropdown Styles */
+.user-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+}
+
+.user-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.user-avatar i {
+    font-size: 1.25rem;
+    color: white;
+}
+
+.user-dropdown-content {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(20px);
+    min-width: 200px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    overflow: hidden;
+}
+
+.user-dropdown-content.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.user-info {
+    padding: 1rem 1.25rem 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: capitalize;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0.5rem 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--text-primary);
+}
+
+.dropdown-item.logout-item:hover {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+}
+
+.dropdown-item i {
+    width: 16px;
+    text-align: center;
+}
+
 /* Main Content */
 .main-content {
-    margin-top: 80px;
-    min-height: calc(100vh - 80px);
+    margin-top: 100px;
+    min-height: calc(100vh - 100px);
 }
 
 .page {
@@ -1297,37 +1661,30 @@ body.modal-open {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    /* Hide desktop menu and auth section on mobile */
     .nav-menu {
-        position: fixed;
-        left: -100%;
-        top: 80px;
-        flex-direction: column;
-        background-color: var(--surface-color);
-        width: 100%;
-        text-align: center;
-        transition: 0.3s;
-        box-shadow: var(--shadow-lg);
-        padding: 2rem 0;
+        display: none;
     }
-
-    .nav-menu.active {
-        left: 0;
+    
+    .auth-section {
+        display: none;
     }
 
     .hamburger {
         display: flex;
     }
-
-    .hamburger.active span:nth-child(2) {
-        opacity: 0;
+    
+    /* Reduce navbar padding on mobile */
+    .nav-container {
+        padding: 0 1rem;
     }
-
-    .hamburger.active span:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
+    
+    .nav-logo {
+        font-size: 1.25rem;
     }
-
-    .hamburger.active span:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
+    
+    .nav-logo i {
+        font-size: 1.5rem;
     }
 
     .hero {
@@ -1360,6 +1717,7 @@ body.modal-open {
     .timeline-item {
         flex-direction: column;
     }
+}
 
     .timeline-marker {
         margin-bottom: 1rem;
@@ -1412,9 +1770,56 @@ body.modal-open {
     .footer-bottom-links {
         justify-content: center;
     }
-}
+
 
 @media (max-width: 480px) {
+    /* Navigation responsive styles */
+    .nav-container {
+        padding: 0 0.75rem;
+    }
+    
+    .nav-logo {
+        font-size: 1.1rem;
+    }
+    
+    .nav-logo i {
+        font-size: 1.3rem;
+    }
+    
+    .hamburger {
+        padding: 4px;
+    }
+    
+    .hamburger span {
+        width: 20px;
+        height: 2px;
+    }
+    
+    /* Mobile menu responsive */
+    .mobile-menu {
+        width: 260px;
+    }
+    
+    .mobile-nav-link {
+        padding: 1rem 1.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .mobile-sub-link {
+        padding: 0.875rem 2.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .mobile-auth {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+    }
+    
+    .mobile-login-btn {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* General mobile styles */
     .hero-content h1 {
         font-size: 1.75rem;
     }
