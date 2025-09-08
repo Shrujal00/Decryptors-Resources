@@ -487,6 +487,46 @@
         </div>
     </div>
 
+    <!-- Edit Roadmap Modal -->
+    <div id="edit-roadmap-modal" class="modal">
+        <div class="modal-content large-modal">
+            <span class="close" onclick="closeEditRoadmapModal()">&times;</span>
+            <h2>Edit Roadmap</h2>
+            <form id="edit-roadmap-form">
+                <div class="form-group">
+                    <label for="edit-roadmap-id">Roadmap ID:</label>
+                    <input type="text" id="edit-roadmap-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="edit-roadmap-title">Title:</label>
+                    <input type="text" id="edit-roadmap-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-roadmap-icon">Icon (FontAwesome class):</label>
+                    <input type="text" id="edit-roadmap-icon" placeholder="e.g., fas fa-globe" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-roadmap-description">Description:</label>
+                    <textarea id="edit-roadmap-description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Steps:</label>
+                    <div id="edit-roadmap-steps-list"></div>
+                    <button type="button" class="btn btn-secondary" onclick="addEditStepInput()">
+                        <i class="fas fa-plus"></i> Add Step
+                    </button>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Update Roadmap</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteCurrentRoadmap()">
+                        <i class="fas fa-trash"></i> Delete Roadmap
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditRoadmapModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Scripts - Load in correct order -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
